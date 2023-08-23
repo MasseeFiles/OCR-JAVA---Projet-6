@@ -1,4 +1,4 @@
-package com.paymybuddy.domain;
+package com.paymybuddy.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,6 +25,8 @@ import lombok.Data;
         @GeneratedValue(strategy = GenerationType.IDENTITY) //mode de generation de l'attribut - en rapport avec identity column de la BDD
         @Column(name = "money_transaction_id")
         private int moneyTransactionId;
+
+
 /*
         public String getGiverEmail() {
             return giverEmail;
@@ -66,12 +68,6 @@ import lombok.Data;
             this.moneyTransactionId = moneyTransactionId;
         }
 
-
-//@EmbeddedId //specifie le field à utiliser en PK
-        //private PrimaryKeyContactId id;
-    }
-
 */
-
 
 }

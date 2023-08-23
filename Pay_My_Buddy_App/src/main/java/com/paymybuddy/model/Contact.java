@@ -1,7 +1,10 @@
-package com.paymybuddy.domain;
+package com.paymybuddy.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,10 +21,11 @@ public class Contact {
         private String nameContact;
         //@NotBlank(message = "Connection name is mandatory")
 
-        /*@Id //clef primaire
-        @GeneratedValue(strategy = GenerationType.IDENTITY) //mode de generation de l'attribut - en rapport avec identity column de la BDD
-        @Column(name = "money_transaction_id")
-        private int moneyTransactionId;*/
+        @EmbeddedId //annotation pour déclarer une primary key composite (classe particuliere composée de originEmail et otherEmail)
+        private ContactID contactID;
+
+
+
 /*
     public String getOriginEmail() {
         return originEmail;
