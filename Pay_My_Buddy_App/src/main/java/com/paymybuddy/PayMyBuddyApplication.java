@@ -5,15 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication  //annotation pour indiquer emplacement de Main classe
-public class DataLayerApplication implements CommandLineRunner {
+public class PayMyBuddyApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DataLayerApplication.class, args);
+        SpringApplication.run(PayMyBuddyApplication.class, args);
     }
-
-    @Override         // Verification de l'acces à la BDD - recuperation des users
-    public void run(String... args) throws Exception {
-    }
-
 }
 

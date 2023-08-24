@@ -8,11 +8,11 @@ import java.util.List;
 
 @Data
 @Entity //annotation mappage objet sql / objet java
-@Table(name = "user")  //lien direct entre objet java et table associée
+@Table(name = "users")  //lien direct entre objet java et table associée
 public class User {
 
     @Id //specifie le field à utiliser en PK
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO) //generationType.auto car identity se base sur une clef autoincrement de la BDD - pas possible avec pk String
     @Column(name = "user_email")
     private String userEmail;
     //@NotBlank(message = "Username is mandatory")    //dependance maven à ajouter ex: hibernate validator

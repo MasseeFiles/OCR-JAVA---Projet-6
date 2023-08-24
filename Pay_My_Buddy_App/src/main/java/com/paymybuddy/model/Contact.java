@@ -3,12 +3,10 @@ package com.paymybuddy.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Entity
-@Table(name = "contact")
+//@IdClass(ContactIdIdClass)      //clef primaire composite avec @IdClass
+@Table(name = "contacts")
 public class Contact {
         @Column(name = "origin_email")
         private String originEmail;
@@ -21,34 +19,15 @@ public class Contact {
         private String nameContact;
         //@NotBlank(message = "Connection name is mandatory")
 
-        @EmbeddedId //annotation pour déclarer une primary key composite (classe particuliere composée de originEmail et otherEmail)
-        private ContactID contactID;
+        @EmbeddedId     //      clef primaire composite avec @EmbeddedId (originEmail et otherEmail)
+        private ContactIdEmbeddedId contactIdEmbeddedId;
 
+/*      clef primaire composite avec @IdClass (originEmail et otherEmail)
 
+        @Id
+        private String originEmail;
 
-/*
-    public String getOriginEmail() {
-        return originEmail;
-    }
-
-    public void setOriginEmail(String originEmail) {
-        this.originEmail = originEmail;
-    }
-
-    public String getOtherEmail() {
-        return otherEmail;
-    }
-
-    public void setOtherEmail(String otherEmail) {
-        this.otherEmail = otherEmail;
-    }
-
-    public String getNameContact() {
-        return nameContact;
-    }
-
-    public void setNameContact(String nameContact) {
-        this.nameContact = nameContact;
-    }
-    */
+        @Id
+        private String otherEmail;
+         */
 }
