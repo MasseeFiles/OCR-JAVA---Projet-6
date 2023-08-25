@@ -12,7 +12,6 @@ import java.util.List;
 public class User {
 
     @Id //specifie le field à utiliser en PK
-    @GeneratedValue(strategy = GenerationType.AUTO) //generationType.auto car identity se base sur une clef autoincrement de la BDD - pas possible avec pk String
     @Column(name = "user_email")
     private String userEmail;
     //@NotBlank(message = "Username is mandatory")    //dependance maven à ajouter ex: hibernate validator
@@ -20,6 +19,12 @@ public class User {
     @Column(name = "password")
     private String password;
     //@NotBlank(message = "Password is mandatory")
+
+    @Column()
+    private String firstName;  //a initialiser lors d'instanciation
+
+    @Column()
+    private String lastName;  //a initialiser lors d'instanciation
 
     @Column(name = "balance")
     private float balance;  //a initialiser lors d'instanciation
