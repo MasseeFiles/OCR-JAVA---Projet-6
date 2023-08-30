@@ -16,14 +16,14 @@ public class UserService {
     }
 
     public void addUser(User userToAdd){
-        userRepository.save(userToAdd);    //methode findAll() fournie par userRepository car la classe userRepository etend la class crudrepository
+        userRepository.save(userToAdd);
     }
 
     public void updateUser(User userToUpdate){
-        userRepository.save(userToUpdate);    //methode findAll() fournie par userRepository car la classe userRepository etend la class crudrepository
+        userRepository.save(userToUpdate);
     }
 
     public void deleteUser(User userToDelete){
-        userRepository.delete(userToDelete);    //methode findAll() fournie par userRepository car la classe userRepository etend la class crudrepository
+        userRepository.delete(userToDelete);
     }
 }

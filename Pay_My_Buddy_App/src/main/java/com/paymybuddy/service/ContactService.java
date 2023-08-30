@@ -15,8 +15,7 @@ public class ContactService {
         return contactRepository.findAll();
     }
 
-    public void addContact(Contact contactToAdd) {
-        contactRepository.save(contactToAdd);
+    public void addContact(Contact contactToAdd) {contactRepository.save(contactToAdd);
     }
 
     public void updateContact(Contact contactToUpdate) {

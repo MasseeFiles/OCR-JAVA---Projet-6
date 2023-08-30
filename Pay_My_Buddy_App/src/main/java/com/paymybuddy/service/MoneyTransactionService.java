@@ -15,10 +15,11 @@ public class MoneyTransactionService {
         return moneyTransactionRepository.findAll();
     }
 
-//    public void addMoneyTransaction(MoneyTransaction moneyTransactionToAdd) {
-//        MoneyTransactionRepository.save(moneyTransactionToAdd);
-//    }
-//
+    public void addMoneyTransaction(MoneyTransaction moneyTransactionToAdd) {
+        MoneyTransactionRepository.save(moneyTransactionToAdd);
+    }
+
+/*
 //    public void updateMoneyTransaction(MoneyTransaction moneyTransactionToUpdate) {
 //        MoneyTransactionRepository.save(moneyTransactionToUpdate);
 //    }
@@ -26,5 +27,7 @@ public class MoneyTransactionService {
     public void deleteMoneyTransaction(MoneyTransaction moneyTransactionToDelete) {
         moneyTransactionRepository.delete(moneyTransactionToDelete);
     }
+*/
+
 }
 

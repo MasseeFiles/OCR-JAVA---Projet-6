@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Pay My Buddy : Login page </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+</head>
+<body>
+    <div class="container-fluid">
+        <header class="header">
+            <div class="banner">Pay My Buddy</div>
+        </header>
+        <section>
+            <div class="loginBox" style="margin-top:80px;">
+                <img src="pay_my_buddy_layouts/layouts/Pics/logoPMB.png" alt="Logo - Pay My Buddy" class="logoLogin">
+            <!-- Mettre formulaires email et password puis bouton login
+                <form>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username">
+                </form>
+                <form>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+                </form>
+
+                <input type="Login" value="Submit">
+                -->
+
+                <form action="#" th:action="@{/user/validate}" th:object="${user}" method="post" class="form-horizontal" style="width: 100%">
+                    <div class="form-group">
+                        <label for="userNameInput" class="form-label">User Name</label>
+                            <input type="text" th:field="*{username}" id="userNameInput" placeholder="Email" class="form-input" >
+                            <p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordInput" class="form-label">Password</label>
+                            <input type="text" th:field="*{password}" id="passwordInput" placeholder="Password" class="form-input" >
+                            <p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

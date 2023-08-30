@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8"/>
+  <title>Add contact</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+</head>
+
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <h2>Add a new contact </h2>
+  </div>
+
+  <div class="row">
+    <form action="#" th:action="@{/user/validate}" th:object="${user}" method="post" class="form-horizontal" style="width: 100%">
+
+      <div class="form-group">
+        <label for="otherEmail" class="col-sm-2 control-label">New contact email</label>
+        <div class="col-sm-10">
+          <input type="text" th:field="*{otherEmail}" id="otherEmail" placeholder="New contact email" class="col-4">
+          <p class="text-danger" th:if="${#fields.hasErrors('otherEmail')}" th:errors="*{otherEmail}"></p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="nameContact" class="col-sm-2 control-label">New contact name</label>
+        <div class="col-sm-10">
+          <input type="text" th:field="*{nameContact}" id="nameContact" placeholder="New contact name" class="col-4">
+          <p class="text-danger" th:if="${#fields.hasErrors('nameContact')}" th:errors="*{nameContact}"></p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-12">
+          <input class="btn btn-primary btn-sm" type="submit" value="Add contact">
+          <a class="btn btn-danger btn-sm" href="">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
