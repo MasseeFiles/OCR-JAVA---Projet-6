@@ -1,17 +1,13 @@
 package com.paymybuddy.controllers;
 
+import com.paymybuddy.model.Contact;
 import com.paymybuddy.model.User;
 import com.paymybuddy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class userController {
@@ -19,53 +15,30 @@ public class userController {
     private UserService userService;
 
     @PostMapping(value = "/user")
-    public ResponseEntity addUser(@RequestBody User userToAdd) {
-        //LOGGER.info("Requete pour l'ajout d'un user : " + userToAdd);
+    public String addUser(User userToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
+        //LOGGER.info("Requete pour l'ajout d'un contact : " + contactToAdd);
         try {
             userService.addUser(userToAdd);
-            return ResponseEntity.ok().build();
+            return "redirect:/user/homepage";
         } catch (RuntimeException ex) {
-            //LOGGER.warn("Impossible d'ajouter l'utilisateur " + fireStationToAdd, ex);
-            return ResponseEntity.badRequest().build();
+            //LOGGER.warn("Impossible d'ajouter la connection " + contactToAdd, ex);
+            return "error";
         }
     }
-
-    @PutMapping(value = "/user")
-    public ResponseEntity updateUser(@RequestBody User userToUpdate) {
-        //LOGGER.info("Requete pour la mise à jour d'un  utilisateur : " + userToUpdate);
-        try {
-            userService.updateUser(userToUpdate);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException ex) {
-            //LOGGER.warn("Impossible de mettre à jour l'utilisateur " + userToUpdate, ex);
-            return ResponseEntity.badRequest().build();
+/* EXEMPLE P7
+    @PostMapping("/user/update/{id}")
+    public String updateUser(@PathVariable("id") Integer id, @Valid User user,
+                             BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "user/update";
         }
-    }
 
-    @DeleteMapping(value = "/user")
-    public ResponseEntity deleteUser(@RequestBody User userToDelete) {
-        //LOGGER.info("Requete pour la suppression d'un utilisateur : " + userToDelete);
-        try {
-            userService.deleteUser(userToDelete);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException ex) {
-            //LOGGER.warn("Impossible de supprimer l'utilisateur " + userToDelete, ex);
-            return ResponseEntity.badRequest().build();
-        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setId(id);
+        userRepository.save(user);
+        model.addAttribute("users", userRepository.findAll());
+        return "redirect:/user/list";
     }
-
-    /*
-    @PostMapping("/user")
-    public String validate(@Valid User user, BindingResult result, Model model) {
-        if (!result.hasErrors()) {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            user.setPassword(encoder.encode(user.getPassword()));
-            userRepository.save(user);
-            model.addAttribute("users", userRepository.findAll());
-            return "redirect:/user/list";
-        }
-        return "user/add";
-    }
-*/
-
+ */
 }

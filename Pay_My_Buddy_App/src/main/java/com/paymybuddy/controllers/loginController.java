@@ -11,13 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/login")
-public class loginController {
+public class loginController {  //uniquement validation email/password
 /*
-    @GetMapping("/showListUser")
-    public String show(User user){
-        return "users.html";
-    }
-*/
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -29,4 +24,5 @@ public class loginController {
         }
         return "user/add";
     }
+*/
 }

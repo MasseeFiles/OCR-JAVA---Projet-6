@@ -4,47 +4,41 @@ import com.paymybuddy.model.Contact;
 import com.paymybuddy.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 public class contactController {
+
     @Autowired
     private ContactService contactService;
 
     @PostMapping(value = "/contact")
-    public ResponseEntity addContact(@RequestBody Contact contactToAdd) {
+    public String addContact(Contact contactToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
         //LOGGER.info("Requete pour l'ajout d'un contact : " + contactToAdd);
         try {
             contactService.addContact(contactToAdd);
-            return ResponseEntity.ok().build();
+            return "redirect:/user/homepage";
         } catch (RuntimeException ex) {
             //LOGGER.warn("Impossible d'ajouter la connection " + contactToAdd, ex);
-            return ResponseEntity.badRequest().build();
+            return "error";
         }
     }
+/* EXEMPLE P7
+    @PostMapping("/user/update/{id}")
+    public String updateUser(@PathVariable("id") Integer id, @Valid User user,
+                             BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "user/update";
+        }
 
-    @PutMapping(value = "/contact")
-    public ResponseEntity updateContact(@RequestBody Contact contactToUpdate) {
-        //LOGGER.info("Requete pour la mise à jour d'un contact : " + contactToUpdate);
-        try {
-            contactService.updateContact(contactToUpdate);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException ex) {
-            //LOGGER.warn("Impossible de mettre à jour le contact " + contactToUpdate, ex);
-            return ResponseEntity.badRequest().build();
-        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setId(id);
+        userRepository.save(user);
+        model.addAttribute("users", userRepository.findAll());
+        return "redirect:/user/list";
     }
-
-    @DeleteMapping(value = "/contact")
-    public ResponseEntity deleteUser(@RequestBody Contact contactToDelete) {
-        //LOGGER.info("Requete pour la suppression d'un contact : " + contactToDelete);
-        try {
-            contactService.deleteContact(contactToDelete);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException ex) {
-            //LOGGER.warn("Impossible de supprimer le contact " + userToDelete, ex);
-            return ResponseEntity.badRequest().build();
-        }
-    }
+ */
 }
 
