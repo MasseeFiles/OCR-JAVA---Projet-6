@@ -26,4 +26,7 @@ public class MoneyTransaction {
     //mode de generation de l'attribut - en rapport avec identity column de la BDD
     @Column(name = "money_transaction_id")
     private int moneyTransactionId;
+
+    public MoneyTransaction(String giverEmail1, String receiverEmail1, String description1, int i) {
+    }
 }

@@ -5,15 +5,17 @@ import com.paymybuddy.model.User;
 import com.paymybuddy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class userController {
     @Autowired
     private UserService userService;
 
+    //ENDPOINT
     @PostMapping(value = "/user")
     public String addUser(User userToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
         //LOGGER.info("Requete pour l'ajout d'un contact : " + contactToAdd);
