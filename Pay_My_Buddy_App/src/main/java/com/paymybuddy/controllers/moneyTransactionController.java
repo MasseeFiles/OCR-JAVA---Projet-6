@@ -1,10 +1,11 @@
 package com.paymybuddy.controllers;
 
-import ch.qos.logback.core.model.Model;
 import com.paymybuddy.model.MoneyTransaction;
+import com.paymybuddy.model.User;
 import com.paymybuddy.service.MoneyTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -18,24 +19,26 @@ public class moneyTransactionController {
     public String getTransfer(Model model) {
 
         MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
+        User user = new User();
+        user.setFirstName("bob");
 
-        moneyTransactions[0] = new MoneyTransaction("giverEmail1", "receiverEmail1", "description1", 15);
-        moneyTransactions[1] = new MoneyTransaction("giverEmail2", "receiverEmail2", "description2", 456);
-        moneyTransactions[2] = new MoneyTransaction("giverEmail3", "receiverEmail3", "description3", 78);
-        moneyTransactions[3] = new MoneyTransaction("giverEmail4", "receiverEmail4", "description4", 21);
+        moneyTransactions[0] = new MoneyTransaction("giverEmail1", user , "description1", 15);
+        moneyTransactions[1] = new MoneyTransaction("giverEmail2", user , "description2", 456);
+        moneyTransactions[2] = new MoneyTransaction("giverEmail3", user , "description3", 78);
+        moneyTransactions[3] = new MoneyTransaction("giverEmail4", user , "description4", 21);
 
         model.addAttribute("moneyTransactions", moneyTransactions);
 
         return "transfer";
     }
-/*
+
     @PostMapping("/moneyTransaction")
     public String addMoneyTransaction(MoneyTransaction moneyTransactionToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
-        model.addAttribute();
+        //model.addAttribute("moneyTransactions", moneyTransactions);
         //LOGGER.info("Requete pour l'ajout d'un contact : " + contactToAdd);
         try {
             moneyTransactionService.addMoneyTransaction(moneyTransactionToAdd);
-            return "redirect:/user/homepage";
+            return "redirect:/transfer";
         } catch (RuntimeException ex) {
             //LOGGER.warn("Impossible d'ajouter la connection " + contactToAdd, ex);
             return "error";
@@ -43,7 +46,7 @@ public class moneyTransactionController {
     }
 
 
- */
+
     /* EXEMPLE P7
     @PostMapping("/user/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,

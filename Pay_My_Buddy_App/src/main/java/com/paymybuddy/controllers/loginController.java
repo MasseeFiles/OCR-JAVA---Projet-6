@@ -1,7 +1,6 @@
 package com.paymybuddy.controllers;
 
 import com.paymybuddy.model.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

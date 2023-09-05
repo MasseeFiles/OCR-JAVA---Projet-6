@@ -2,16 +2,19 @@ package com.paymybuddy.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "money_transactions")
 public class MoneyTransaction {
     @Column(name = "giver_Email")
     private String giverEmail;
 
-    @Column(name = "receiver_email")
-    private String receiverEmail;
+    @ManyToOne
+    @JoinColumn(name = "receiver_email")
+    private User receiver;
     //@NotBlank(message = "Connection email is mandatory")
 
     @Column(name = "description")
@@ -27,6 +30,10 @@ public class MoneyTransaction {
     @Column(name = "money_transaction_id")
     private int moneyTransactionId;
 
-    public MoneyTransaction(String giverEmail1, String receiverEmail1, String description1, int i) {
+    public MoneyTransaction(String giverEmail, User receiver, String description, float amount) {
+        this.giverEmail = giverEmail;
+        this.receiver = receiver;
+        this.description = description;
+        this.amount = amount;
     }
 }

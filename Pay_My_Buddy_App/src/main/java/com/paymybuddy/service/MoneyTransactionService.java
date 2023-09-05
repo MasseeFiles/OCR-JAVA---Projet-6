@@ -12,7 +12,7 @@ public class MoneyTransactionService {
     private MoneyTransactionRepository moneyTransactionRepository;
 
     public void addMoneyTransaction(MoneyTransaction moneyTransactionToAdd) {
-        //MoneyTransactionRepository.save(moneyTransactionToAdd);
+        moneyTransactionRepository.save(moneyTransactionToAdd);
     }
 }
 
