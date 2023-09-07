@@ -2,35 +2,51 @@ package com.paymybuddy.service;
 
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.User;
+import com.paymybuddy.repository.MoneyTransactionRepository;
+import com.paymybuddy.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 public class PaymentService {
+    @Autowired
+    private UserRepository userRepository;
 
-    public boolean verifyBalance(MoneyTransaction moneyTransaction) {
-        boolean paymentPossible;
-        float moneyTransferAmount = moneyTransaction.getAmount();
+    @Autowired
+    private MoneyTransactionRepository moneyTransactionRepository;
 
-        User userToCheck = new User();
-        float balanceUser = userToCheck.getBalance();
+    public boolean allowPayment(MoneyTransaction moneyTransaction, User giver) {
+        boolean paymentAllowed;
 
-        User userReceiver = new User();
-        float balanceReceiver = userReceiver.getBalance();
+        float transferAmount = moneyTransaction.getAmount();
 
-        if (moneyTransferAmount < balanceUser) {
-            paymentPossible = true;
-            float newBalanceUser = balanceUser - moneyTransferAmount;
+        String giverEmail = moneyTransaction.getGiverEmail();
+        Optional<User> optionalGiver = userRepository.findById(giverEmail);
+        User giverToCheck = optionalGiver.get();
+        float balanceGiver = giverToCheck.getBalance();
 
+        if (transferAmount < balanceGiver) {    //verification du solde du donneur
+            paymentAllowed = true;
 
-            float newBalanceReceiver = balanceReceiver + moneyTransferAmount;
+            User giverToUpdate = optionalGiver.get();   //a voir si plutot utilisation de givertocheck
+            float balanceGiverToUpdate = giverToUpdate.getBalance();
+            float newBalanceGiver = balanceGiverToUpdate - (transferAmount + (transferAmount * 0.05f));
+            giverToUpdate.setBalance(newBalanceGiver);
+            userRepository.save(giverToUpdate); //update
 
-// persister la moneyTransaction
+            String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
+            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
+            User receiver = optionalReceiver.get();
+            float balanceReceiver = receiver.getBalance();
+            float newBalanceReceiver = balanceReceiver + transferAmount;
+            receiver.setBalance(newBalanceReceiver);
+            userRepository.save(receiver); //update
+
+            moneyTransactionRepository.save(moneyTransaction);
 
         } else {
-            paymentPossible = false;
+            paymentAllowed = false;
         }
-        return paymentPossible;
-    }
-
-    public float calculateFee(MoneyTransaction moneyTransaction) {
-        return moneyTransaction.getAmount()*0.05f;
+        return paymentAllowed;
     }
 }
