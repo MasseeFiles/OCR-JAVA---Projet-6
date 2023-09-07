@@ -15,17 +15,17 @@ public class PaymentService {
     @Autowired
     private MoneyTransactionRepository moneyTransactionRepository;
 
-    public boolean allowPayment(MoneyTransaction moneyTransaction, User giver) {
+    public boolean allowPayment(MoneyTransaction moneyTransaction) {
         boolean paymentAllowed;
 
         float transferAmount = moneyTransaction.getAmount();
 
         String giverEmail = moneyTransaction.getGiverEmail();
-        Optional<User> optionalGiver = userRepository.findById(giverEmail);
+        Optional<User> optionalGiver = userRepository.findById(giverEmail); //recherche dans la bdd des infos du giver
         User giverToCheck = optionalGiver.get();
         float balanceGiver = giverToCheck.getBalance();
 
-        if (transferAmount < balanceGiver) {    //verification du solde du donneur
+        if (transferAmount <= balanceGiver) {    //verification du solde du donneur
             paymentAllowed = true;
 
             User giverToUpdate = optionalGiver.get();   //a voir si plutot utilisation de givertocheck
@@ -36,11 +36,11 @@ public class PaymentService {
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
             Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
-            User receiver = optionalReceiver.get();
-            float balanceReceiver = receiver.getBalance();
+            User receiverToUpdate = optionalReceiver.get();
+            float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;
-            receiver.setBalance(newBalanceReceiver);
-            userRepository.save(receiver); //update
+            receiverToUpdate.setBalance(newBalanceReceiver);
+            userRepository.save(receiverToUpdate); //update
 
             moneyTransactionRepository.save(moneyTransaction);
 
