@@ -6,14 +6,18 @@
     <meta charset="UTF-8">
     <title>Transfer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
+    <style>
+        <!--.placeholder-right::placeholder {
+            text-align: right;
+        }-->
+    </style>
 </head>
 <body>
     <div class="container-fluid">
         <header>
             <div class="text-light bg-dark pt-23 text-center" style="height: 2em">Pay My Buddy</div>
             <div class="row">
-                <div class="col-5"><img src="./resources/pics/logoPMB.png" alt="Logo - Pay My Buddy"></div>
+                <div class="col-5"><img src="logoPMB.png" alt="Logo - Pay My Buddy" width="150"></div>
                 <div class="col-7">
                     <nav style="height: 1em">
                         <ul class="nav navbar-default offset-8">
@@ -40,12 +44,13 @@
                     </div>
                     <div class="container text-center border bg-light" style="height: 7em">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button class="btn btn-default dropdown-toggle btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Select a connection
-                                <span class="caret"></span>
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm">Middle</button>
-                            <button type="button" class="btn btn-success btn-sm">Pay</button>
+                            <form action="/moneyTransactionForm" method="post">
+                                <button class="btn btn-default dropdown-toggle btn-sm" style="border: 1px solid #000000;"  type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Select a connection
+                                </button>
+                                <input type="number" class="placeholder-right" placeholder="0€" id="quantity" name="quantity" min="0">
+                                <button type="submit" class="btn btn-success btn-sm" value="Submit">Pay</button>
+                            </form>
                         </div>
                     </div>
                 </div>

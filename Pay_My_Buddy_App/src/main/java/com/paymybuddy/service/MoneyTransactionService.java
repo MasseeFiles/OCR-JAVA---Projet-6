@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 public class MoneyTransactionService {
 
     @Autowired
-    private MoneyTransactionRepository moneyTransactionRepository;
+    private PaymentService paymentService;
 
     public void addMoneyTransaction(MoneyTransaction moneyTransactionToAdd) {
-        moneyTransactionRepository.save(moneyTransactionToAdd);
+        paymentService.allowPayment(moneyTransactionToAdd);
     }
 }
 
