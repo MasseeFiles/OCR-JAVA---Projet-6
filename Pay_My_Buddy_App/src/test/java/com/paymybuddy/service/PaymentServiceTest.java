@@ -15,19 +15,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class PaymentServiceTest {
-    @Autowired
     private UserRepository userRepository;
-
-//    @Autowired
-//    private MoneyTransactionRepository moneyTransactionRepository;
-
-    @Autowired
-    private PaymentService paymentService;
+    private MoneyTransactionRepository moneyTransactionRepository;
+    private PaymentService service;
 
     @BeforeEach
     public void setup() {
-        // Create a mock DatabaseConnector
         userRepository = mock(UserRepository.class);
+        moneyTransactionRepository = mock(MoneyTransactionRepository.class);
+        service = new PaymentService (userRepository , moneyTransactionRepository);
     }
     @Test
     void allowPayment_GiverBalanceOK() {
@@ -38,21 +34,24 @@ class PaymentServiceTest {
 
         User giver = new User();
         giver.setUserEmail("giver@email.com");
+        giver.setBalance(500f);
         Optional<User> optionalGiverTest = Optional.of(giver);
         String giverEmail = "giver@email.com";
         when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
-
         User receiver = new User();
         receiver.setUserEmail("receiver@email.com");
         receiver.setBalance(500f);
+        Optional<User> optionalReceiverTest = Optional.of(giver);
+
         moneyTransaction.setReceiver(receiver);
+        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
 
 //        User receiver = new User();
 //        receiver.setUserEmail("receiver@email.com");
 //        moneyTransaction.setReceiver(receiver);
 
         //WHEN
-        boolean booleanTest = paymentService.allowPayment(moneyTransaction);
+        boolean booleanTest = service.allowPayment(moneyTransaction);
 
         //THEN
         assertTrue(booleanTest);

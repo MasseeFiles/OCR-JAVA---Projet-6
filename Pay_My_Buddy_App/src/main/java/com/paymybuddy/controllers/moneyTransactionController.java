@@ -3,6 +3,7 @@ package com.paymybuddy.controllers;
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.User;
 import com.paymybuddy.service.MoneyTransactionService;
+import com.paymybuddy.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class moneyTransactionController {
 
     @Autowired
-    private MoneyTransactionService moneyTransactionService;
-
+    private PaymentService paymentService;
     @GetMapping("/transfer")
     public String getTransfer(Model model) {
 
@@ -32,12 +32,12 @@ public class moneyTransactionController {
         return "transfer";
     }
 
-    @PostMapping("/moneyTransaction")
+    @PostMapping("/moneyTransactionForm")
     public String addMoneyTransaction(MoneyTransaction moneyTransactionToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
         //model.addAttribute("moneyTransactions", moneyTransactions);
-        //LOGGER.info("Requete pour l'ajout d'un contact : " + contactToAdd);
+//        LOGGER.info("Requete pour l'ajout d'un contact : " + contactToAdd);
         try {
-            moneyTransactionService.addMoneyTransaction(moneyTransactionToAdd);
+            paymentService.allowPayment(moneyTransactionToAdd);
             return "redirect:/transfer";
         } catch (RuntimeException ex) {
             //LOGGER.warn("Impossible d'ajouter la connection " + contactToAdd, ex);

@@ -5,14 +5,17 @@ import com.paymybuddy.model.User;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class PaymentService {
-    @Autowired
-    private UserRepository userRepository;
+    public PaymentService(UserRepository userRepository, MoneyTransactionRepository moneyTransactionRepository) {
+        this.userRepository = userRepository;
+        this.moneyTransactionRepository = moneyTransactionRepository;
+    }
 
-    @Autowired
+    private UserRepository userRepository;
     private MoneyTransactionRepository moneyTransactionRepository;
 
     public boolean allowPayment(MoneyTransaction moneyTransaction) {
@@ -30,13 +33,13 @@ public class PaymentService {
 
             User giverToUpdate = optionalGiver.get();   //a voir si plutot utilisation de givertocheck
             float balanceGiverToUpdate = giverToUpdate.getBalance();
-            float newBalanceGiver = balanceGiverToUpdate - (transferAmount + (transferAmount * 0.05f));
+            float newBalanceGiver = balanceGiverToUpdate - transferAmount;
             giverToUpdate.setBalance(newBalanceGiver);
             userRepository.save(giverToUpdate); //update
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
             Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
-            User receiverToUpdate = optionalReceiver.get();
+            User receiverToUpdate = optionalReceiver.orElseThrow(() -> new RuntimeException("receiver not found"));
             float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;
             receiverToUpdate.setBalance(newBalanceReceiver);

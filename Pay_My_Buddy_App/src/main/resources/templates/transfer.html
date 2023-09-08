@@ -44,12 +44,12 @@
                     </div>
                     <div class="container text-center border bg-light" style="height: 7em">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <form action="/moneyTransactionForm" method="post">
-                                <button class="btn btn-default dropdown-toggle btn-sm" style="border: 1px solid #000000;"  type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <form th:action="@{/moneyTransactionForm}" method="post">
+                                <select class="btn btn-default dropdown-toggle btn-sm" style="border: 1px solid #000000;"  type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     Select a connection
-                                </button>
+                                </select>
                                 <input type="number" class="placeholder-right" placeholder="0€" id="quantity" name="quantity" min="0">
-                                <button type="submit" class="btn btn-success btn-sm" value="Submit">Pay</button>
+                                <button type="submit" class="btn btn-success btn-sm">Pay</button>
                             </form>
                         </div>
                     </div>
