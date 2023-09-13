@@ -114,7 +114,7 @@ class PaymentServiceTest {
         assertThrows(RuntimeException.class, () -> paymentservice.allowPayment(moneyTransaction));
         assertThatThrownBy(() -> paymentservice.allowPayment(moneyTransaction))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("???");
+                .hasMessageContaining("User giver not found : Id used ");
 
     }
 }
