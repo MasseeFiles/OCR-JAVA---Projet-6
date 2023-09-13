@@ -43,6 +43,10 @@
                             <input type="text" th:field="*{password}" id="passwordInput" placeholder="Password" class="form-input" >
                             <p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
                     </div>
+                    <div>
+                        <input type="checkbox" class="form-check-input" id="rememberMeCheck">
+                        <label for="rememberMeCheck" class="form-check-label">Remember me</label>
+                    </div>
                 </form>
             </div>
         </section>

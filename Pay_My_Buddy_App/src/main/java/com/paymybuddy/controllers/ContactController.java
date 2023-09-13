@@ -3,12 +3,11 @@ package com.paymybuddy.controllers;
 import com.paymybuddy.model.Contact;
 import com.paymybuddy.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-public class contactController {
+public class ContactController {
 
     @Autowired
     private ContactService contactService;

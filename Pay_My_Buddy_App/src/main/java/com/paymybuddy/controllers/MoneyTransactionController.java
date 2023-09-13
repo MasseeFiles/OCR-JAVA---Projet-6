@@ -1,9 +1,12 @@
 package com.paymybuddy.controllers;
 
+import com.paymybuddy.model.Contact;
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.User;
-import com.paymybuddy.service.MoneyTransactionService;
 import com.paymybuddy.service.PaymentService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class moneyTransactionController {
-
+public class MoneyTransactionController {
+    private static final Logger logger = LogManager.getLogger("MoneyTransactionController");
     @Autowired
     private PaymentService paymentService;
     @GetMapping("/transfer")
@@ -29,40 +32,35 @@ public class moneyTransactionController {
 
         model.addAttribute("moneyTransactions", moneyTransactions);
 
+        Contact[] contacts = new Contact[4];
+
+        contacts[0] = new Contact("bob");
+        contacts[1] = new Contact("mike");
+        contacts[2] = new Contact("kim");
+        contacts[3] = new Contact("cindy");
+
+        model.addAttribute("contacts", contacts);
+
         return "transfer";
     }
 
     @PostMapping("/moneyTransactionForm")
-    public String addMoneyTransaction(MoneyTransaction moneyTransactionToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
-        //model.addAttribute("moneyTransactions", moneyTransactions);
-//        LOGGER.info("Requete pour l'ajout d'un contact : " + contactToAdd);
+    public String processPayment(Model model , MoneyTransaction moneyTransactionToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
+
+        logger.info("Requete pour l'ajout d'une moneyTransaction : " + moneyTransactionToAdd);
+
+//        model.addAttribute( "errorMessage", String.format("Could not validate this money transaction!"));
+//        model.addAttribute( "successMessage", String.format("Money transaction validated!"));
+
+
         try {
             paymentService.allowPayment(moneyTransactionToAdd);
             return "redirect:/transfer";
         } catch (RuntimeException ex) {
-            //LOGGER.warn("Impossible d'ajouter la connection " + contactToAdd, ex);
-            return "error";
+            logger.warn("Impossible d'ajouter la moneyTransaction " + moneyTransactionToAdd, ex);
+            return "transfer";
         }
     }
-
-
-
-    /* EXEMPLE P7
-    @PostMapping("/user/update/{id}")
-    public String updateUser(@PathVariable("id") Integer id, @Valid User user,
-                             BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "user/update";
-        }
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setId(id);
-        userRepository.save(user);
-        model.addAttribute("users", userRepository.findAll());
-        return "redirect:/user/list";
-    }
- */
 }
 
 

@@ -1,16 +1,11 @@
 package com.paymybuddy.controllers;
 
-import com.paymybuddy.model.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/login")
-public class loginController {  //uniquement validation email/password
+public class LoginController {  //uniquement validation email/password
 /*
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {

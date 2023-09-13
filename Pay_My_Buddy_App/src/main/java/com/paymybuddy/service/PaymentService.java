@@ -4,10 +4,10 @@ import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.User;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
 @Service
 public class PaymentService {
     public PaymentService(UserRepository userRepository, MoneyTransactionRepository moneyTransactionRepository) {
@@ -18,13 +18,21 @@ public class PaymentService {
     private UserRepository userRepository;
     private MoneyTransactionRepository moneyTransactionRepository;
 
-    public boolean allowPayment(MoneyTransaction moneyTransaction) {
+    public boolean allowPayment(MoneyTransaction moneyTransaction) throws RuntimeException {
         boolean paymentAllowed;
-
         float transferAmount = moneyTransaction.getAmount();
 
         String giverEmail = moneyTransaction.getGiverEmail();
-        Optional<User> optionalGiver = userRepository.findById(giverEmail); //recherche dans la bdd des infos du giver
+        Optional<User> optionalGiver = Optional.of(userRepository.findById(giverEmail)
+                .orElseThrow(() -> new RuntimeException("User giver not found : Id used " + giverEmail)));
+
+//        Optional<User> optionalGiver = Optional.ofNullable(userRepository.findById(giverEmail);
+//        if(optionalGiver.isPresent()){
+//            giverToCheck = optionalGiver.get();
+//        } else {
+//            throw new RuntimeException("User giver not found : Id used " + giverEmail);
+//        }
+
         User giverToCheck = optionalGiver.get();
         float balanceGiver = giverToCheck.getBalance();
 
@@ -38,8 +46,19 @@ public class PaymentService {
             userRepository.save(giverToUpdate); //update
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
-            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
-            User receiverToUpdate = optionalReceiver.orElseThrow(() -> new RuntimeException("receiver not found"));
+
+            Optional<User> optionalReceiver = Optional.of(userRepository.findById(receiverEmail)
+                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));
+//            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
+//            if(optionalReceiver.isPresent()){
+//                receiverToUpdate = optionalReceiver.get();
+//            } else {
+//                throw new RuntimeException("User receiver not found : Id used " + receiverEmail);
+//            }
+
+//            orElseThrow(
+//                    () -> new RuntimeException("User receiver not found : Id used " + receiverEmail));
+            User receiverToUpdate = optionalReceiver.get();
             float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;
             receiverToUpdate.setBalance(newBalanceReceiver);
