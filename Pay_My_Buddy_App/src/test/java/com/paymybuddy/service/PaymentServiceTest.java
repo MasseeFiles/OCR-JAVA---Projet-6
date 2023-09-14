@@ -52,15 +52,14 @@ class PaymentServiceTest {
 
         //THEN
         assertTrue(booleanTest);
-//        assertion sur calcul de solde - parametre appel de methode userRepository.save(receiverToUpdate);
-//        float newBalanceGiverExpected = 500f;
-//        float newBalanceGiverActual = giver.getBalance();
-//        assertEquals(newBalanceGiverExpected, newBalanceGiverActual);
-//
-//
-//        float newBalanceReceiverExpected = 700f;
-//        float newBalanceReceiver = receiver.getBalance();
-//        assertEquals(newBalanceReceiverExpected, newBalanceReceiver);
+
+        float newBalanceGiverExpected = 299.95f;
+        float newBalanceGiverActual = giver.getBalance();
+        assertEquals(newBalanceGiverExpected, newBalanceGiverActual);
+
+        float newBalanceReceiverExpected = 700.05f;
+        float newBalanceReceiver = receiver.getBalance();
+        assertEquals(newBalanceReceiverExpected, newBalanceReceiver);
     }
 
     @Test
@@ -99,7 +98,8 @@ class PaymentServiceTest {
         moneyTransaction.setAmount(200.05f);
 
         String giverEmail = "giver@email.com";
-        when(userRepository.findById(giverEmail)).thenReturn(null);  //giver non present dans la BDD , renvoie null
+        Optional<User> optionalEmpty = Optional.empty();
+        when(userRepository.findById(giverEmail)).thenReturn(optionalEmpty);  //giver non present dans la BDD , renvoie un optional Empty
 
         User receiver = new User();
         receiver.setUserEmail("receiver@email.com");
