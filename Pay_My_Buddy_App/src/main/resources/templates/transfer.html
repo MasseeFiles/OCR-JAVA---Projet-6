@@ -49,41 +49,20 @@
                         <!-- comment indiquer qu'on renvoie un objet moneyTransaction ou moneyTransactionDto?-->
 
                         <form th:action="@{/moneyTransactionForm}" method="POST">
-                            <label > Select a connection</label>
-                            <select name="selectedContact">
+                            <select name="selectedContact" id="stylingContactCss" th:value="${contact.nameContact}">
+                                <option selected disabled>Select a connection</option>
                                 <option th:each="contact : ${contacts}" th:text="${contact.nameContact}"></option>
                             </select>
-                            <input type="number" class="placeholder-right" placeholder="0€"
-                                   id="quantity" name="amount" min="0">
+                            <input name="transferAmount" id="stylingTransferAmountCss" type="number" placeholder="0€"
+                                   min="0" style="text-align: right;">
                             <button type="submit" class="btn btn-success btn-sm">Pay</button>
-
                         </form>
-
-
-                           <!--
-                           <form th:action="@{/moneyTransactionForm}" method="POST">
-                               <label for="contactDropDownList" class="form-label">Select a connection</label>
-                               <select th:value="${contact.nameContact}" id="contactDropDownList">
-                                   <option th:each="contact : ${contacts}" th:text="${contact.nameContact}}"></option>
-                               </select>
-                               <select th:field="*{contact}" class="btn btn-default dropdown-toggle btn-sm"
-                                       style="border: 1px solid #000000;" id="contactDropDownMenu" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="true">
-                                   <option th:each="nameContact : ${nameContacts}"
-                                           th:text="#{${nameContact}"></option>
-                               </select>
-                                   <input th:value="${contact.nameContact}"  type="number" class="placeholder-right" placeholder="0€"
-                                   id="quantity" name="amount" min="0">
-                                   <button type="submit" class="btn btn-success btn-sm">Pay</button>
-                           </form>
-                           -->
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="container">
         <div class="row">
             <div class="col-9"><h5>My Transaction</h5></div>
@@ -101,6 +80,5 @@
             </table>
         </div>
     </div>
-
 </div>
 </html>

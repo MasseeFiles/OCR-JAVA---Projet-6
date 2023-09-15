@@ -63,28 +63,45 @@ public class MoneyTransactionController {
 //    }
 
     //version du controller avec dto : utilisation de modelMapper necessaire pour conversion???
-//    @PostMapping("/moneyTransactionForm")
-//    public String processPayment(Model model , MoneyTransactionDto moneyTransactionDto) {    //valeur renvoyée est une string qui indique une view à afficher
-//
-//        logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
-//
-//        MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
-//
-//        moneyTransactionToAdd.setGiverEmail(moneyTransactionDto.getGiverEmail());
-//        User user = new User();
-//        user.setUserEmail(moneyTransactionDto.getReceiverEmail());
-//        moneyTransactionToAdd.setReceiver(user);
-//        moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
-//        // par d'ajout de description dans une nouvelle moneyTransaction pour l'instant
-//
-//        try {
-//            paymentService.allowPayment(moneyTransactionToAdd);
-//            return "redirect:/transfer";
-//        } catch (RuntimeException ex) {
-//            logger.warn("Impossible d'ajouter la moneyTransaction " + moneyTransactionToAdd, ex);
-//            return "transfer";
-//        }
-//    }
+    @PostMapping("/moneyTransactionForm")
+    public String processPayment(Model model , MoneyTransactionDto moneyTransactionDto) {    //valeur renvoyée est une string qui indique une view à afficher
+
+        logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
+
+        MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
+
+        String giverEmailToAdd = getGiverEmail(moneyTransactionDto);    // rechercher dans BDD de giverEmail avec nameContact du DTO
+        moneyTransactionToAdd.setGiverEmail(giverEmailToAdd);
+
+        String receiverEmailToAdd = getReceiverEmail(moneyTransactionDto);  // rechercher dans BDD de receiverEmail avec nameContact du DTO
+        User user1 = new User();
+        user1.setUserEmail(receiverEmailToAdd);
+        moneyTransactionToAdd.setReceiver(user1);
+
+        moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
+        // par d'ajout de description dans une nouvelle moneyTransaction pour l'instant
+
+        try {
+            paymentService.allowPayment(moneyTransactionToAdd);
+            return "redirect:/transfer";
+        } catch (RuntimeException ex) {
+            logger.warn("Impossible d'ajouter la moneyTransaction " + moneyTransactionToAdd, ex);
+            return "transfer";
+        }
+    }
+
+    private String getReceiverEmail(MoneyTransactionDto moneyTransactionDto) {
+        String nameContact = moneyTransactionDto.getNameContactDto();
+        String receiverEmail = ("methode access BDD à écrire");
+        return receiverEmail;
+    }
+
+    private String getGiverEmail(MoneyTransactionDto moneyTransactionDto) {
+        String nameContact = moneyTransactionDto.getNameContactDto();
+
+        String giverEmail = ("methode access BDD à écrire");
+        return giverEmail;
+    }
 
 }
 
