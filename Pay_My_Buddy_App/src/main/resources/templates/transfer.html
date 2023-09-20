@@ -46,15 +46,18 @@
                 </div>
                 <div class="container text-center border bg-light" style="height: 7em">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <!-- comment indiquer qu'on renvoie un objet moneyTransaction ou moneyTransactionDto?-->
-
-                        <form th:action="@{/moneyTransactionForm}" method="POST">
-                            <select name="selectedContact" id="stylingContactCss" th:value="${contact.nameContact}">
+                        <form th:action="@{/transferRequest}" method="POST">
+                            <select name="contactIdEmbeddedIdOtherEmail" id="contactIdEmbeddedIdOtherEmail" >
+                                <!-- name=contactIdEmbeddedIdOtherEmail est le nom exact d'un des attributs de l'objet attendu par le controleur (dans l'objet moneyTransactionDto) -->
                                 <option selected disabled>Select a connection</option>
-                                <option th:each="contact : ${contacts}" th:text="${contact.nameContact}"></option>
+                                <option th:each="contact : ${contacts}" th:text="${contact.nameContact}" th:value="${contact.contactIdEmbeddedId.otherEmail}"></option>
+                                <!-- th:text = le texte qui doit etre affiché pour l'option , th:value = la valeur qui doit être mise dans le form si cette option est choisie-->
+
                             </select>
-                            <input name="transferAmount" id="stylingTransferAmountCss" type="number" placeholder="0€"
+                            <input name="transferAmount" id="transferAmount" type="number" placeholder="0€"
                                    min="0" style="text-align: right;">
+                            <!-- name=transferAmount est le nom exact d'un des attributs de l'objet attendu par le controleur (dans l'objet moneyTransactionDto) -->
+
                             <button type="submit" class="btn btn-success btn-sm">Pay</button>
                         </form>
 

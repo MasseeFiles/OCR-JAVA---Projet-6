@@ -4,6 +4,7 @@ import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.User;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,47 +19,52 @@ public class PaymentService {
         this.moneyTransactionRepository = moneyTransactionRepository;
     }
 
-    public boolean allowPayment(MoneyTransaction moneyTransaction) throws RuntimeException {    //interet de throws RuntimeException
+    @Transactional  //@Transactional(rollbackOn = RuntimeException.class)  //Exemple configuration d'un rollback
+    public boolean allowPayment(MoneyTransaction moneyTransaction) {
         boolean paymentAllowed;
         float transferAmount = moneyTransaction.getAmount();
 
         String giverEmail = moneyTransaction.getGiverEmail();
-        Optional<User> optionalGiver = userRepository.findById(giverEmail);
+        User giverToCheck = new User();
+        giverToCheck.setUserEmail("giverEmail1");
+        giverToCheck.setBalance(5000f);
 
-        if (optionalGiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
-            throw new RuntimeException("User giver not found : Id used " + giverEmail);
-        }
-//                // OU AVEC METHOD orElse (impossible à utiliser avec valeur null)
-//
-//        Optional<User> optionalGiver = Optional.of(userRepository.findById(giverEmail)
-//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail)));
+//        User giverToCheck = userRepository.findById(giverEmail)
+//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optinal en User
+
+//            //                Equivaut à
+//        Optional<User> optionalGiver = userRepository.findById(giverEmail);
+//        if (optionalGiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
+//            throw new RuntimeException("User giver not found : Id used " + giverEmail);
+//        }
 //
 
-        User giverToCheck = optionalGiver.get();
         float balanceGiver = giverToCheck.getBalance();
 
         if (transferAmount <= balanceGiver) {    //verification du solde du donneur
             paymentAllowed = true;
 
-            User giverToUpdate = optionalGiver.get();   //a voir si plutot utilisation de givertocheck
-            float balanceGiverToUpdate = giverToUpdate.getBalance();
+            float balanceGiverToUpdate = giverToCheck.getBalance();
             float newBalanceGiver = balanceGiverToUpdate - transferAmount;
-            giverToUpdate.setBalance(newBalanceGiver);
-            userRepository.save(giverToUpdate); //update
+            giverToCheck.setBalance(newBalanceGiver);
+            userRepository.save(giverToCheck); //update
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
 
-            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
 
-            if (optionalReceiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
-                throw new RuntimeException("User receiver not found : Id used " + receiverEmail);
-            }
+            User receiverToUpdate = new User();
+            receiverToUpdate.setBalance(5000f);
 
-//                // OU AVEC METHOD orElse
 //            Optional<User> optionalReceiver = Optional.of(userRepository.findById(receiverEmail)
-//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));
+//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));    //.orElseThrow converti l'optinal en User
 
-            User receiverToUpdate = optionalReceiver.get();
+//            //                Equivaut à
+//            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
+//            if (optionalReceiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
+//                throw new RuntimeException("User receiver not found : Id used " + receiverEmail);
+//            }
+
+//            User receiverToUpdate = optionalReceiver.get();
             float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;
             receiverToUpdate.setBalance(newBalanceReceiver);

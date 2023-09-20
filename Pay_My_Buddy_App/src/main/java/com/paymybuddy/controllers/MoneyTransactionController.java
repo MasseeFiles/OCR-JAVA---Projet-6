@@ -1,9 +1,6 @@
 package com.paymybuddy.controllers;
 
-import com.paymybuddy.model.Contact;
-import com.paymybuddy.model.MoneyTransaction;
-import com.paymybuddy.model.MoneyTransactionDto;
-import com.paymybuddy.model.User;
+import com.paymybuddy.model.*;
 import com.paymybuddy.service.PaymentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +19,8 @@ public class MoneyTransactionController {
     @GetMapping("/transfer")
     public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue
 
+        logger.info("Requete pour l'affichage de la page HTML Transfer");
+
         MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
         User user = new User();
         user.setFirstName("bob");
@@ -34,18 +33,19 @@ public class MoneyTransactionController {
         model.addAttribute("moneyTransactions", moneyTransactions);
 
         Contact[] contacts = new Contact[4];
-
-        contacts[0] = new Contact("bob");
-        contacts[1] = new Contact("mike");
-        contacts[2] = new Contact("kim");
-        contacts[3] = new Contact("cindy");
+// ajouter clef embeddedid dans les contacts
+        ContactIdEmbeddedId contactIdEmbeddedId = new ContactIdEmbeddedId("giverEmail1", "giverEmail4");
+        contacts[0] = new Contact("bob", contactIdEmbeddedId);
+        contacts[1] = new Contact("mike", contactIdEmbeddedId);
+        contacts[2] = new Contact("kim", contactIdEmbeddedId);
+        contacts[3] = new Contact("cindy", contactIdEmbeddedId);
 
         model.addAttribute("contacts", contacts);
 
         return "transfer";
     }
 
-//    @PostMapping("/moneyTransactionForm")
+//    @PostMapping("/transferRequest")
 //    public String processPayment(Model model , MoneyTransaction moneyTransactionToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
 //
 //        logger.info("Requete pour l'ajout d'une moneyTransaction : " + moneyTransactionToAdd);
@@ -63,19 +63,20 @@ public class MoneyTransactionController {
 //    }
 
     //version du controller avec dto : utilisation de modelMapper necessaire pour conversion???
-    @PostMapping("/moneyTransactionForm")
+    @PostMapping("/transferRequest")
     public String processPayment(Model model , MoneyTransactionDto moneyTransactionDto) {    //valeur renvoyée est une string qui indique une view à afficher
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
         MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
-
-        String giverEmailToAdd = getGiverEmail(moneyTransactionDto);    // rechercher dans BDD de giverEmail avec nameContact du DTO
+        String giverEmailToAdd = ("giverEmail1");    // rechercher dans BDD de giverEmail avec nameContact du DTO
         moneyTransactionToAdd.setGiverEmail(giverEmailToAdd);
 
-        String receiverEmailToAdd = getReceiverEmail(moneyTransactionDto);  // rechercher dans BDD de receiverEmail avec nameContact du DTO
+        //Conversion d'un moneyTransactionDto en un moneyTransaction
+        String receiverEmailToAdd = (moneyTransactionDto.getContactIdEmbeddedIdOtherEmail());
         User user1 = new User();
         user1.setUserEmail(receiverEmailToAdd);
+
         moneyTransactionToAdd.setReceiver(user1);
 
         moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
@@ -86,22 +87,22 @@ public class MoneyTransactionController {
             return "redirect:/transfer";
         } catch (RuntimeException ex) {
             logger.warn("Impossible d'ajouter la moneyTransaction " + moneyTransactionToAdd, ex);
-            return "transfer";
+            return "redirect:/transfer";
         }
     }
 
-    private String getReceiverEmail(MoneyTransactionDto moneyTransactionDto) {
-        String nameContact = moneyTransactionDto.getNameContactDto();
-        String receiverEmail = ("methode access BDD à écrire");
-        return receiverEmail;
-    }
-
-    private String getGiverEmail(MoneyTransactionDto moneyTransactionDto) {
-        String nameContact = moneyTransactionDto.getNameContactDto();
-
-        String giverEmail = ("methode access BDD à écrire");
-        return giverEmail;
-    }
+//    private String getReceiverEmail(MoneyTransactionDto moneyTransactionDto) {
+//        String nameContact = moneyTransactionDto.getNameContactDto();
+//        String receiverEmail = ("methode access BDD à écrire");
+//        return receiverEmail;
+//    }
+//
+//    private String getGiverEmail(MoneyTransactionDto moneyTransactionDto) {
+//        String nameContact = moneyTransactionDto.getNameContactDto();
+//
+//        String giverEmail = ("methode access BDD à écrire");
+//        return giverEmail;
+//    }
 
 }
 

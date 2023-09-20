@@ -6,52 +6,60 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Pay My Buddy : Login page </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <style type="text/css">
+        #loginBox {
+            margin-top: 80px;
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            width: fit-content;
+            border: 1px solid black;
+            }
+
+            #loginBox img {
+                margin-bottom: 3em;
+            }
+    </style>
 </head>
 <body>
-
-
-
-    <h1 class="borderBottom">Pay My Buddy</h1>
-    <p>test</p>
-</div>
-
-        <section>
-            <div class="loginBox" style="margin-top:80px;">
-                <img src="/static.css/logoPMB.png" alt="Logo - Pay My Buddy" class="logoLogin">
-            <!-- Mettre formulaires email et password puis bouton login
-                <form>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username">
-                </form>
-                <form>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password">
-                </form>
-
-                <input type="Login" value="Submit">
-                -->
-
-                <form action="#" th:action="@{/user/validate}" th:object="${user}" method="post" class="form-horizontal" style="width: 100%">
-                    <div class="form-group">
-                        <label for="userNameInput" class="form-label">User Name</label>
-                            <input type="text" th:field="*{username}" id="userNameInput" placeholder="Email" class="form-input" >
-                            <p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="passwordInput" class="form-label">Password</label>
-                            <input type="text" th:field="*{password}" id="passwordInput" placeholder="Password" class="form-input" >
-                            <p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-                    </div>
-                    <div>
-                        <input type="checkbox" class="form-check-input" id="rememberMeCheck">
-                        <label for="rememberMeCheck" class="form-check-label">Remember me</label>
-                    </div>
-                </form>
-            </div>
-        </section>
+<div class="container-fluid">
+    <header>
+        <div class="text-light bg-dark pt-23 text-center" style="height: 2em">Pay My Buddy</div>
+    </header>
+    <div th:if="${param.error}">
+        Invalid username and password.
     </div>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    <!--
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    -->
+    <div>
+        <div id="loginBox">
+            <img src="logoPMB.png" alt="Logo - Pay My Buddy">
+            <p th:if="${loginError}" class="error">Wrong user or password</p>
+            <form th:action="@{/login}" method="post" class="form-horizontal">
+                <div class="form-group">
+                    <input type="text" name="userEmail" id="userEmail" placeholder="&#x1F4E7 Email" class="form-input">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" id="password" placeholder="Password"
+                           class="form-input">
+                </div>
+                <div>
+                    <label for="rememberMeCheck" class="form-check-label">Remember me</label>
+                    <input type="checkbox" class="form-check-input" id="rememberMeCheck">
+                </div>
+                <div>
+                    <button type="submit" value="Sign In" class="btn btn-success btn-sm">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
