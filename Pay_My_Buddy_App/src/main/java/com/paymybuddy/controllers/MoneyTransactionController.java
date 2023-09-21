@@ -19,7 +19,7 @@ public class MoneyTransactionController {
     @GetMapping("/transfer")
     public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue
 
-        logger.info("Requete pour l'affichage de la page HTML Transfer");
+        logger.info("Requete pour l'affichage de la page HTML transfer");
 
         MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
         User user = new User();
@@ -33,7 +33,7 @@ public class MoneyTransactionController {
         model.addAttribute("moneyTransactions", moneyTransactions);
 
         Contact[] contacts = new Contact[4];
-// ajouter clef embeddedid dans les contacts
+
         ContactIdEmbeddedId contactIdEmbeddedId = new ContactIdEmbeddedId("giverEmail1", "giverEmail4");
         contacts[0] = new Contact("bob", contactIdEmbeddedId);
         contacts[1] = new Contact("mike", contactIdEmbeddedId);
@@ -45,24 +45,7 @@ public class MoneyTransactionController {
         return "transfer";
     }
 
-//    @PostMapping("/transferRequest")
-//    public String processPayment(Model model , MoneyTransaction moneyTransactionToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
-//
-//        logger.info("Requete pour l'ajout d'une moneyTransaction : " + moneyTransactionToAdd);
-//
-////        model.addAttribute( "errorMessage", String.format("Could not validate this money transaction!"));
-////        model.addAttribute( "successMessage", String.format("Money transaction validated!"));
-//
-//        try {
-//            paymentService.allowPayment(moneyTransactionToAdd);
-//            return "redirect:/transfer";
-//        } catch (RuntimeException ex) {
-//            logger.warn("Impossible d'ajouter la moneyTransaction " + moneyTransactionToAdd, ex);
-//            return "transfer";
-//        }
-//    }
-
-    //version du controller avec dto : utilisation de modelMapper necessaire pour conversion???
+    //version du endpoint avec dto : utilisation de modelMapper necessaire pour conversion???
     @PostMapping("/transferRequest")
     public String processPayment(Model model , MoneyTransactionDto moneyTransactionDto) {    //valeur renvoyée est une string qui indique une view à afficher
 
@@ -80,7 +63,7 @@ public class MoneyTransactionController {
         moneyTransactionToAdd.setReceiver(user1);
 
         moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
-        // par d'ajout de description dans une nouvelle moneyTransaction pour l'instant
+        // pas d'ajout de description dans une nouvelle moneyTransaction pour l'instant
 
         try {
             paymentService.allowPayment(moneyTransactionToAdd);

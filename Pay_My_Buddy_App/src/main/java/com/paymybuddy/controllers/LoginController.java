@@ -1,17 +1,27 @@
 package com.paymybuddy.controllers;
 
+import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.MoneyTransactionDto;
+import com.paymybuddy.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/login")
 public class LoginController {  //uniquement validation email/password
     private static final Logger logger = LogManager.getLogger("LoginController");
+
+    @GetMapping("/login")
+    public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue
+
+        logger.info("Requete pour l'affichage de la page HTML login");
+
+        return "login";
+    }
 
     @PostMapping("/login")
     public String processLogin(Model model , String userName, String password){

@@ -1,8 +1,10 @@
 package com.paymybuddy.configuration;
 
+import com.paymybuddy.repository.UserRepository;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -31,6 +33,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
+    //definition des filtres à appliquer à la requete http envoyée
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -40,74 +43,58 @@ public class SpringSecurityConfig {
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll()
-                )
-                .logout((logout) -> logout.permitAll());
+                );
         return http.build();
     }
+        // Methode de configuration de SpringSecurity pour vérifier l'existence de l'utilisateur dans le référentiel BDD (authentification) et recuperer son niveau d'authorisation (user, admin).
+//    @Autowired
+//    void configureGlobal(DataSource PmbDataBase, AuthenticationManagerBuilder auth) throws Exception {
+    //AuthenticationManagerBuilder permet de configurer un AuthenticationManager (procedure a suivre pour authentifier et ou trouver les informations a verifier
+//        auth.jdbcAuthentication().dataSource(PmbDataBase)
+//                .getUserByEmail
+//                .getUserRole
+//                .encodePassword
+//        ;
+//    }
 
-    //  Definition d'un user test
+//      // methode pour recuperer l'utilisateur en BDD - appel de couche repository sans passer par couche service
+//    @Autowired
+//    UserRepository userRepository;
+//    @Bean
+//    public User getUserByEmail(String userEmail) {
+//        User userToGet = userRepository.findById(userEmail)
+//                .orElseThrow(() -> new RuntimeException("User not found : login provided " + userEmail));     //.orElseThrow converti l'optional en User
+//        return userToGet;
+//    }
+
+        // methode pour recuperer le role de l'utilisateur
+//    @Bean
+//    public String getUserRole(User userToCheck) { //question le ROLE est une donnée particuliere ou une string
+//        String role = userToCheck.getRole();
+//        return role; //admin ou user
+//    }
+
+    // methode de codage du mot de passe avec BCryptPasswordEncoder (interface SpringSecurity - passwordEncoder)
     @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        //PasswordEncoderFactories propose par defaut un cryptage avec BCrypt
-        UserDetails user = User.withUsername("spring")
-                .password(encoder.encode("secret"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
+    public PasswordEncoder encodePassword() {
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();   //  PasswordEncoderFactories propose par defaut un cryptage avec BCrypt
+        return encoder;
+//        @Bean
+//        public BCryptPasswordEncoder encodePassword() {
+//            return new BCryptPasswordEncoder();
+//        }
     }
 }
 
+
+//  Definition d'un user test
 //    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user =
-//                User.withDefaultPasswordEncoder()
-//                        .username("user")
-//                        .password("password")
-//                        .roles("USER")
-//                        .build();
-//
+//    public InMemoryUserDetailsManager userDetailsService() {
+//        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//        //PasswordEncoderFactories propose par defaut un cryptage avec BCrypt
+//        UserDetails user = User.withUsername("spring")
+//                .password(encoder.encode("secret"))
+//                .roles("USER")
+//                .build();
 //        return new InMemoryUserDetailsManager(user);
 //    }
-
-//    @Configuration
-
-
-
-
-    //@EnableWebSecurity
-//public class SpringSecurityConfig {
-//
-//    @Autowired
-//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("user").password("password").roles("USER");
-//    }
-//}
-
-//Essai avec OCR
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/user").hasRole("USER")
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin();
-//    }
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("UserNameExample").password(passwordEncoder().encode("PasswordExample").roles("USER");
-//    }
-//
-// methode de codage du mot de passe avec BCryptPasswordEncoder
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return  new BCryptPasswordEncoder();
-//    }
-//}

@@ -30,12 +30,14 @@ public class PaymentService {
         giverToCheck.setBalance(5000f);
 
 //        User giverToCheck = userRepository.findById(giverEmail)
-//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optinal en User
+//                .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
 
-//            //                Equivaut à
+//                      Equivaut à
 //        Optional<User> optionalGiver = userRepository.findById(giverEmail);
 //        if (optionalGiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
 //            throw new RuntimeException("User giver not found : Id used " + giverEmail);
+//        } else {
+//        User giverToCheck = optionalGiver.get();
 //        }
 //
 
@@ -55,16 +57,17 @@ public class PaymentService {
             User receiverToUpdate = new User();
             receiverToUpdate.setBalance(5000f);
 
-//            Optional<User> optionalReceiver = Optional.of(userRepository.findById(receiverEmail)
-//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));    //.orElseThrow converti l'optinal en User
+//            User receiverToUpdate = userRepository.findById(receiverEmail)
+//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));    //.orElseThrow converti l'optional en User
 
-//            //                Equivaut à
+//                    Equivaut à
 //            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
 //            if (optionalReceiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
 //                throw new RuntimeException("User receiver not found : Id used " + receiverEmail);
+//            } else {
+//            User receiverToUpdate = optionalReceiver.get();
 //            }
 
-//            User receiverToUpdate = optionalReceiver.get();
             float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;
             receiverToUpdate.setBalance(newBalanceReceiver);
