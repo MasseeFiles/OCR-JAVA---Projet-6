@@ -29,7 +29,7 @@ public class LoginController {  //uniquement validation email/password
         logger.info("Requete pour la validation du login de l'utilisateur : " + userName);
 
 
-        return "login";
+        return "redirect:/transfer";
     }
     /*public String validate(@Valid User user, BindingResult result, Model model) {
         if (!result.hasErrors()) {

@@ -33,9 +33,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
-    //definition des filtres à appliquer à la requete http envoyée
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //definition des filtres à appliquer aux differentes requetes http envoyées
+
         http
                 .authorizeHttpRequests((requests) -> requests
                         .anyRequest().authenticated()
@@ -46,28 +47,28 @@ public class SpringSecurityConfig {
                 );
         return http.build();
     }
-        // Methode de configuration de SpringSecurity pour vérifier l'existence de l'utilisateur dans le référentiel BDD (authentification) et recuperer son niveau d'authorisation (user, admin).
-//    @Autowired
-//    void configureGlobal(DataSource PmbDataBase, AuthenticationManagerBuilder auth) throws Exception {
-    //AuthenticationManagerBuilder permet de configurer un AuthenticationManager (procedure a suivre pour authentifier et ou trouver les informations a verifier
-//        auth.jdbcAuthentication().dataSource(PmbDataBase)
-//                .getUserByEmail
-//                .getUserRole
-//                .encodePassword
-//        ;
-//    }
+//     Methode de configuration de SpringSecurity pour vérifier l'existence de l'utilisateur dans le référentiel BDD (authentification) et recuperer son niveau d'authorisation (user, admin).
+    @Autowired
+    void configureGlobal(DataSource pmbDataBase, AuthenticationManagerBuilder auth) throws Exception {
+    //AuthenticationManagerBuilder permet de creer un AuthenticationManager (procedure a suivre pour authentifier et ou trouver les informations a verifier
+        auth.jdbcAuthentication().dataSource(pmbDataBase)
+                .getUserByEmail
+                .getUserRole
+                .encodePassword
+        ;
+    }
 
-//      // methode pour recuperer l'utilisateur en BDD - appel de couche repository sans passer par couche service
-//    @Autowired
-//    UserRepository userRepository;
-//    @Bean
-//    public User getUserByEmail(String userEmail) {
-//        User userToGet = userRepository.findById(userEmail)
-//                .orElseThrow(() -> new RuntimeException("User not found : login provided " + userEmail));     //.orElseThrow converti l'optional en User
-//        return userToGet;
-//    }
+      // methode pour recuperer l'utilisateur en BDD - appel de couche repository sans passer par couche service
+    @Autowired
+    UserRepository userRepository;
+    @Bean
+    public User getUserByEmail(String userEmail) {
+        User userToGet = userRepository.findById(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found : login provided " + userEmail));     //.orElseThrow converti l'optional en User
+        return userToGet;
+    }
 
-        // methode pour recuperer le role de l'utilisateur
+    // methode pour recuperer le role de l'utilisateur
 //    @Bean
 //    public String getUserRole(User userToCheck) { //question le ROLE est une donnée particuliere ou une string
 //        String role = userToCheck.getRole();
@@ -84,10 +85,9 @@ public class SpringSecurityConfig {
 //            return new BCryptPasswordEncoder();
 //        }
     }
-}
 
 
-//  Definition d'un user test
+//  Definition d'un user test avec WebSecurityConfigurerAdapter
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailsService() {
 //        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -98,3 +98,19 @@ public class SpringSecurityConfig {
 //                .build();
 //        return new InMemoryUserDetailsManager(user);
 //    }
+
+
+    //  Definition d'un user test sans WebSecurityConfigurerAdapter
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("password"))
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user);
+    }
+}
