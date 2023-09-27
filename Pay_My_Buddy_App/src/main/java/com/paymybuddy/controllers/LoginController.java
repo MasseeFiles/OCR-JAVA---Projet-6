@@ -1,5 +1,6 @@
 package com.paymybuddy.controllers;
 
+import com.paymybuddy.model.LoginDto;
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.MoneyTransactionDto;
 import com.paymybuddy.model.User;
@@ -24,9 +25,9 @@ public class LoginController {  //uniquement validation email/password
     }
 
     @PostMapping("/login")
-    public String processLogin(Model model , String userName, String password){
+    public String processLogin(Model model , LoginDto loginDto){
 
-        logger.info("Requete pour la validation du login de l'utilisateur : " + userName);
+        logger.info("Requete pour la validation du login de l'utilisateur : " + loginDto.getUserEmail());
 
 
         return "redirect:/transfer";

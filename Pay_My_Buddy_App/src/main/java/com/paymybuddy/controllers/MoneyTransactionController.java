@@ -1,53 +1,53 @@
 package com.paymybuddy.controllers;
 
-import com.paymybuddy.model.*;
+import com.paymybuddy.model.Contact;
+import com.paymybuddy.model.MoneyTransaction;
+import com.paymybuddy.model.MoneyTransactionDto;
+import com.paymybuddy.model.User;
+import com.paymybuddy.repository.ContactRepository;
+import com.paymybuddy.repository.MoneyTransactionRepository;
+import com.paymybuddy.service.DataInsertService;
 import com.paymybuddy.service.PaymentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class MoneyTransactionController {
     private static final Logger logger = LogManager.getLogger("MoneyTransactionController");
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private DataInsertService dataInsertService;
+//    @Autowired
+//    private ContactRepository contactRepository;
+//    @Autowired
+//    private MoneyTransactionRepository moneyTransactionRepository;
+
+
+
     @GetMapping("/transfer")
     public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
 
-        MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
-        User user = new User();
-        user.setFirstName("bob");
-
-        moneyTransactions[0] = new MoneyTransaction("giverEmail1", user , "description1", 15);
-        moneyTransactions[1] = new MoneyTransaction("giverEmail2", user , "description2", 456);
-        moneyTransactions[2] = new MoneyTransaction("giverEmail3", user , "description3", 78);
-        moneyTransactions[3] = new MoneyTransaction("giverEmail4", user , "description4", 21);
-
+        List<MoneyTransaction> moneyTransactions = dataInsertService.getMoneyTransactions(); //insertion des moneyTransactions dans la BDD h2
         model.addAttribute("moneyTransactions", moneyTransactions);
 
-        Contact[] contacts = new Contact[4];
-
-        ContactIdEmbeddedId contactIdEmbeddedId = new ContactIdEmbeddedId("giverEmail1", "giverEmail4");
-        contacts[0] = new Contact("bob", contactIdEmbeddedId);
-        contacts[1] = new Contact("mike", contactIdEmbeddedId);
-        contacts[2] = new Contact("kim", contactIdEmbeddedId);
-        contacts[3] = new Contact("cindy", contactIdEmbeddedId);
-
+        List<Contact> contacts = dataInsertService.getContacts(); //insertion des moneyTransactions dans la BDD h2
         model.addAttribute("contacts", contacts);
 
         return "transfer";
     }
 
-    //version du endpoint avec dto : utilisation de modelMapper necessaire pour conversion???
     @PostMapping("/transferRequest")
-    public String processPayment(Model model , MoneyTransactionDto moneyTransactionDto) {    //valeur renvoyée est une string qui indique une view à afficher
+    public String processPayment(Model model, MoneyTransactionDto moneyTransactionDto) {    //valeur renvoyée est une string qui indique une view à afficher
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
@@ -57,13 +57,13 @@ public class MoneyTransactionController {
 
         //Conversion d'un moneyTransactionDto en un moneyTransaction
         String receiverEmailToAdd = (moneyTransactionDto.getContactIdEmbeddedIdOtherEmail());
-        User user1 = new User();
-        user1.setUserEmail(receiverEmailToAdd);
+        User userReceiver = new User();
+        userReceiver.setUserEmail(receiverEmailToAdd);
 
-        moneyTransactionToAdd.setReceiver(user1);
+        moneyTransactionToAdd.setReceiver(userReceiver);
 
         moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
-        // pas d'ajout de description dans une nouvelle moneyTransaction pour l'instant
+        // pas d'ajout de description dans une nouvelle moneyTransaction
 
         try {
             paymentService.allowPayment(moneyTransactionToAdd);
@@ -73,20 +73,6 @@ public class MoneyTransactionController {
             return "redirect:/transfer";
         }
     }
-
-//    private String getReceiverEmail(MoneyTransactionDto moneyTransactionDto) {
-//        String nameContact = moneyTransactionDto.getNameContactDto();
-//        String receiverEmail = ("methode access BDD à écrire");
-//        return receiverEmail;
-//    }
-//
-//    private String getGiverEmail(MoneyTransactionDto moneyTransactionDto) {
-//        String nameContact = moneyTransactionDto.getNameContactDto();
-//
-//        String giverEmail = ("methode access BDD à écrire");
-//        return giverEmail;
-//    }
-
 }
 
 

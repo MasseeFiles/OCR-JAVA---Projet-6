@@ -46,15 +46,20 @@
                 </div>
                 <div class="container text-center border bg-light" style="height: 7em">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <form th:action="@{/transferRequest}" method="POST">
-                            <select name="contactIdEmbeddedIdOtherEmail" id="contactIdEmbeddedIdOtherEmail" >
-                                <!-- name=contactIdEmbeddedIdOtherEmail est le nom exact d'un des attributs de l'objet attendu par le controleur (dans l'objet moneyTransactionDto) -->
+                        <form th:action="@{/transferRequest}" th:object="${moneyTransactionDto}" method="POST">
+                            <!--th:field permet de lier un la valeur dun élément html à une propriété d’un java bean.-->
+                            <!--th:field remplace les html id , name , et value-->
+
+                            <select  id="contactIdEmbeddedIdOtherEmail" name="contactIdEmbeddedIdOtherEmail">
+                                <!-- id et/ ou name correspond a valeur à mettre  dans le form (et donc dans l'objet java renvoyé???) -->
                                 <option selected disabled>Select a connection</option>
-                                <option th:each="contact : ${contacts}" th:text="${contact.nameContact}" th:value="${contact.contactIdEmbeddedId.otherEmail}"></option>
-                                <!-- th:text = le texte qui doit etre affiché pour l'option , th:value = la valeur qui doit être mise dans le form si cette option est choisie-->
+
+                                <option th:each="contact : ${contacts}" th:text="${contact.nameContact}" th:value="${contact.contactIdEmbeddedId.otherEmail}" ></option>
+
+                                <!-- th:text = le texte qui doit etre affiché pour l'option , th:value = la valeur qui est associée à l"element selectionné-->
 
                             </select>
-                            <input name="transferAmount" id="transferAmount" type="number" placeholder="0€"
+                            <input type="number" th:value="${transferAmount}" placeholder="0€"  id="transferAmount" name="transferAmount"
                                    min="0" style="text-align: right;">
                             <!-- name=transferAmount est le nom exact d'un des attributs de l'objet attendu par le controleur (dans l'objet moneyTransactionDto) -->
 
