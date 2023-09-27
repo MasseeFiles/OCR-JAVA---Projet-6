@@ -6,6 +6,7 @@ import com.paymybuddy.model.MoneyTransactionDto;
 import com.paymybuddy.model.User;
 import com.paymybuddy.repository.ContactRepository;
 import com.paymybuddy.repository.MoneyTransactionRepository;
+import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.service.DataInsertService;
 import com.paymybuddy.service.PaymentService;
 import org.apache.logging.log4j.LogManager;
@@ -25,10 +26,12 @@ public class MoneyTransactionController {
     private PaymentService paymentService;
     @Autowired
     private DataInsertService dataInsertService;
-//    @Autowired
-//    private ContactRepository contactRepository;
-//    @Autowired
-//    private MoneyTransactionRepository moneyTransactionRepository;
+    @Autowired
+    private ContactRepository contactRepository;
+    @Autowired
+    private MoneyTransactionRepository moneyTransactionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 
 

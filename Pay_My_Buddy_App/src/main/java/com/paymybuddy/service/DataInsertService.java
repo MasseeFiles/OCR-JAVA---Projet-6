@@ -16,13 +16,15 @@ import java.util.List;
 
 @Service
 public class DataInsertService {
-    @Autowired
+    private UserRepository userRepository;
     private ContactRepository contactRepository;
-    @Autowired
     private MoneyTransactionRepository moneyTransactionRepository;
 
-    //Controller
+    //Constructeur
     public DataInsertService(ContactRepository contactRepository, MoneyTransactionRepository moneyTransactionRepository, UserRepository userRepository) {
+        this.contactRepository = contactRepository;
+        this.moneyTransactionRepository = moneyTransactionRepository;
+        this.userRepository = userRepository;
 
         MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
         User userMoneyTransaction = new User();
@@ -44,9 +46,6 @@ public class DataInsertService {
         contacts[2] = new Contact("kim", contactIdEmbeddedId);
         contacts[3] = new Contact("cindy", contactIdEmbeddedId);
         contactRepository.saveAll(Arrays.asList(contacts));
-
-//        this.contactRepository = contactRepository;
-//        this.moneyTransactionRepository = moneyTransactionRepository;
     }
 
     public List<MoneyTransaction> getMoneyTransactions() {
