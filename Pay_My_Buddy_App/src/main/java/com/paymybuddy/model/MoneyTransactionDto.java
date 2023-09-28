@@ -8,5 +8,4 @@ import lombok.NoArgsConstructor;
 public class MoneyTransactionDto {
     private String contactIdEmbeddedIdOtherEmail;
     private float transferAmount;
-
 }

@@ -36,4 +36,12 @@ public class User {
     )
     @JoinColumn(name = "origin_email" )    //doit specifier nom de clef etrangere
     private List<Contact> contacts = new ArrayList<Contact>();
+
+    public User() {
+    }
+    public User(String userEmail, String password , float balance) {
+        this.userEmail = userEmail;
+        this.password = password;
+
+    }
 }

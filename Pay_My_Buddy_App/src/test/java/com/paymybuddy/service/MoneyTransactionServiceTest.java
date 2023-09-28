@@ -14,16 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class PaymentServiceTest {
+class MoneyTransactionServiceTest {
     private UserRepository userRepository;
     private MoneyTransactionRepository moneyTransactionRepository;
-    private PaymentService paymentservice;
+    private MoneyTransactionService paymentservice;
 
     @BeforeEach
     public void setup() {
         userRepository = mock(UserRepository.class);
         moneyTransactionRepository = mock(MoneyTransactionRepository.class);
-        paymentservice = new PaymentService(userRepository, moneyTransactionRepository);
+        paymentservice = new MoneyTransactionService(userRepository, moneyTransactionRepository);
     }
 
     @Test

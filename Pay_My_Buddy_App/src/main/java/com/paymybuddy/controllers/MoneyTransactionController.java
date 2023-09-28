@@ -7,8 +7,8 @@ import com.paymybuddy.model.User;
 import com.paymybuddy.repository.ContactRepository;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
-import com.paymybuddy.service.DataInsertService;
-import com.paymybuddy.service.PaymentService;
+import com.paymybuddy.service.ContactService;
+import com.paymybuddy.service.MoneyTransactionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,33 +17,34 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class MoneyTransactionController {
     private static final Logger logger = LogManager.getLogger("MoneyTransactionController");
+
     @Autowired
-    private PaymentService paymentService;
-    @Autowired
-    private DataInsertService dataInsertService;
+    private MoneyTransactionService moneyTransactionService;
     @Autowired
     private ContactRepository contactRepository;
     @Autowired
     private MoneyTransactionRepository moneyTransactionRepository;
-    @Autowired
-    private UserRepository userRepository;
-
-
 
     @GetMapping("/transfer")
     public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
+        //insertion des moneyTransactions dans la BDD h2
 
-        List<MoneyTransaction> moneyTransactions = dataInsertService.getMoneyTransactions(); //insertion des moneyTransactions dans la BDD h2
+        //methode 1 - transformation d'un iterable en collection (list)
+        List<MoneyTransaction> moneyTransactions = (List<MoneyTransaction>) moneyTransactionRepository.findAll();
         model.addAttribute("moneyTransactions", moneyTransactions);
 
-        List<Contact> contacts = dataInsertService.getContacts(); //insertion des moneyTransactions dans la BDD h2
+        //methode 2
+        List<Contact> contacts = new ArrayList<Contact>();
+        Iterable<Contact> iterable = contactRepository.findAll();
+        iterable.forEach(contacts::add);
         model.addAttribute("contacts", contacts);
 
         return "transfer";
@@ -69,7 +70,7 @@ public class MoneyTransactionController {
         // pas d'ajout de description dans une nouvelle moneyTransaction
 
         try {
-            paymentService.allowPayment(moneyTransactionToAdd);
+            moneyTransactionService.allowPayment(moneyTransactionToAdd);
             return "redirect:/transfer";
         } catch (RuntimeException ex) {
             logger.warn("Impossible d'ajouter la moneyTransaction " + moneyTransactionToAdd, ex);

@@ -18,11 +18,7 @@ public class Contact {
         public Contact(String nameContact, ContactIdEmbeddedId contactIdEmbeddedId) {
                 this.nameContact = nameContact;
                 this.contactIdEmbeddedId = contactIdEmbeddedId;
-
         }
-
-
-
 /*      clef primaire composite avec @IdClass (originEmail et otherEmail)
 
         @Id

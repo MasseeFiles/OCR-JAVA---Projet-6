@@ -7,14 +7,14 @@ import com.paymybuddy.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
-public class PaymentService {
+public class MoneyTransactionService {
     private UserRepository userRepository;
     private MoneyTransactionRepository moneyTransactionRepository;
 
-    public PaymentService(UserRepository userRepository, MoneyTransactionRepository moneyTransactionRepository) {
+    public MoneyTransactionService(UserRepository userRepository, MoneyTransactionRepository moneyTransactionRepository) {
         this.userRepository = userRepository;
         this.moneyTransactionRepository = moneyTransactionRepository;
     }
@@ -25,9 +25,7 @@ public class PaymentService {
         float transferAmount = moneyTransaction.getAmount();
 
         String giverEmail = moneyTransaction.getGiverEmail();
-        User giverToCheck = new User();
-        giverToCheck.setUserEmail("giverEmail1");
-        giverToCheck.setBalance(5000f);
+        User giverToCheck = new User("giverEmail1" , "passGiverEmail" , 5000f);
 
 //        User giverToCheck = userRepository.findById(giverEmail)
 //                .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
@@ -54,8 +52,7 @@ public class PaymentService {
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
 
 
-            User receiverToUpdate = new User();
-            receiverToUpdate.setBalance(5000f);
+            User receiverToUpdate = new User("bob", "pass1", 5000f);
 
 //            User receiverToUpdate = userRepository.findById(receiverEmail)
 //                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));    //.orElseThrow converti l'optional en User
