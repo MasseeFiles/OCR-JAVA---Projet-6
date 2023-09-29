@@ -9,20 +9,33 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
+<!--ID pour CSS, name pour server-->
     <style type="text/css">
-        #loginBox {
-            margin-top: 80px;
-            padding-left: 50px;
-            padding-right: 50px;
-            padding-top: 50px;
-            padding-bottom: 50px;
-            width: fit-content;
+    #loginBox {
+            padding-left: 120px;
+            padding-right: 120px;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            width: 30%;
             border: 1px solid black;
+            margin-top: 3em;
             }
 
-            #loginBox img {
-                margin-bottom: 3em;
-            }
+    .logo {
+        margin-top: 1em;
+        margin-bottom: 1em;
+
+        width: 15em;
+        }
+
+    .formBox {
+        margin-top: 2em;
+        margin-bottom: 3em;
+    }
+
+    .center{
+    margin: auto;
+    }
     </style>
 </head>
 <body>
@@ -30,35 +43,24 @@
     <header>
         <div class="text-light bg-dark pt-23 text-center" style="height: 2em">Pay My Buddy</div>
     </header>
-    <div th:if="${param.error}">
-        Invalid username and password.
-    </div>
-    <!--
-    <div th:if="${param.logout}">
-        You have been logged out.
-    </div>
-    -->
-    <div>
-        <div id="loginBox">
-            <img src="logoPMB.png" alt="Logo - Pay My Buddy">
-            <p th:if="${loginError}" class="error">Wrong user or password</p>
-            <form th:action="@{/login}" th:object="${loginDto} "method="post" class="form-horizontal">
-                <div class="form-group">
-                    <input type="text" th:field="*{userEmail}" placeholder="&#x1F4E7 Email" class="form-input">
-                </div>
-                <div class="form-group">
-                    <input type="password" th:field="*{password}" placeholder="Password"
-                           class="form-input">
-                </div>
-                <div>
-                    <label for="rememberMeCheck" class="form-check-label">Remember me</label>
-                    <input type="checkbox" class="form-check-input" id="rememberMeCheck">
-                </div>
-                <div>
-                    <button type="submit" value="Sign In" class="btn btn-success btn-sm">Login</button>
-                </div>
-            </form>
-        </div>
+    <div id="loginBox" class="center text-center">
+        <img src="logoPMB.png" alt="Logo - Pay My Buddy" class="logo">
+        <form th:action="@{/login}" th:object="${loginDto}" method="post">
+            <div class="formBox">
+                <input type="text" th:field="*{userEmail}" placeholder="&#x1F4E7 Email" class="form-input">
+            </div>
+            <div class="formBox">
+                <input type="password" th:field="*{password}" placeholder="&#10034 Password"
+                       class="form-input">
+            </div>
+            <div>
+                <input type="checkbox" class="form-check-label center" id="rememberMe">
+                <label for="rememberMe" class="form-check-label">Remember me</label>
+            </div>
+            <div class="formBox">
+                <button type="submit" value="Sign In" class="btn btn-primary">Login</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>

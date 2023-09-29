@@ -8,85 +8,82 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style type="text/css">
+        .center{
+            margin: auto;
+        }
+        .formMargin{
+            margin-left: 3em;
+            margin-right: 3em;
+                        margin-top: auto;
+            margin-bottom: auto;
+
+        }
     </style>
 </head>
 <div class="container-fluid">
     <header>
         <div class="text-light bg-dark pt-23 text-center" style="height: 2em">Pay My Buddy</div>
         <div class="row">
-            <div class="col-5"><img src="logoPMB.png" alt="Logo - Pay My Buddy" width="150"></div>
-            <div class="col-7">
-                <nav style="height: 1em">
-                    <ul class="nav navbar-default offset-8">
+            <div class="col-1"><img src="logoPMB.png" alt="Logo - Pay My Buddy" width="150"></div>
+            <div class="col-11">
+                <nav style="height: 1em" class="float-end">
+                    <ul class="nav navbar-default">
                         <li class="px-2 "><a href="#">Home</a></li>
                         <li class="px-2"><a href="transfer">Transfer</a></li>
                         <li class="px-2"><a href="#">Profile</a></li>
                         <li class="px-2"><a href="#">Contact</a></li>
                         <li class="px-2"><a href="#">Log off</a></li>
                     </ul>
-                    <ol class="breadcrumb text-right" style="background-color: #f2f3f4;">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Transfer</li>
-                    </ol>
                 </nav>
             </div>
         </div>
+            <ol class="breadcrumb text-right center" style="width: 100% ; background-color: #f2f3f4 ; height: 3em">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Transfer</li>
+            </ol>
     </header>
-    <div class="offset-md-1" style="width:80%">
-        <!--
-        <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success" role="alert"></div>
-        <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger" role="alert"></div>
-        -->
-        <div class="mt-5 mb-3">
-            <div class="container">
-                <div class="row">
-                    <div class="col-9"><h5>Send Money</h5></div>
-                    <div class="col-3"><a class="btn btn-primary offset-6" href="http://www.google.com">Add
-                        Connection</a></div>
-                </div>
-                <div class="container text-center border bg-light" style="height: 7em">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <form th:action="@{/transferRequest}" th:object="${moneyTransactionDto}" method="POST">
-                            <!--th:field permet de lier un la valeur dun élément html à une propriété d’un java bean.-->
-                            <!--th:field remplace les html id , name , et value-->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-6"><h5>Send Money</h5></div>
+            <div class="col-6"><a class="btn btn-primary float-end">Add
+                Connection</a></div>
+        </div>
+        <div align="center" class="border bg-light" style="height: 7em">
+            <form th:action="@{/transferRequest}" th:object="${moneyTransactionDto}" method="POST">
+                <!--th:field permet de lier un la valeur dun élément html à une propriété d’un java bean.-->
+                <!--th:field remplace les html id , name , et value-->
 
-                            <select  id="contactIdEmbeddedIdOtherEmail" name="contactIdEmbeddedIdOtherEmail">
-                                <!-- id et/ ou name correspond a valeur à mettre  dans le form (et donc dans l'objet java renvoyé???) -->
-                                <option selected disabled>Select a connection</option>
+                <select  id="contactIdEmbeddedIdOtherEmail" name="contactIdEmbeddedIdOtherEmail" class="formMargin">
+                    <!-- id et/ ou name correspond a valeur à mettre  dans le form (et donc dans l'objet java renvoyé???) -->
+                    <option selected disabled>Select a connection</option>
 
-                                <option th:each="contact : ${contacts}" th:text="${contact.nameContact}" th:value="${contact.contactIdEmbeddedId.otherEmail}" ></option>
+                    <option th:each="contact : ${contacts}" th:text="${contact.nameContact}" th:value="${contact.contactIdEmbeddedId.otherEmail}" ></option>
 
-                                <!-- th:text = le texte qui doit etre affiché pour l'option , th:value = la valeur qui est associée à l"element selectionné-->
+                    <!-- th:text = le texte qui doit etre affiché pour l'option , th:value = la valeur qui est associée à l"element selectionné-->
 
-                            </select>
-                            <input type="number" th:value="${transferAmount}" placeholder="0€"  id="transferAmount" name="transferAmount"
-                                   min="0" style="text-align: right;">
-                            <!-- name=transferAmount est le nom exact d'un des attributs de l'objet attendu par le controleur (dans l'objet moneyTransactionDto) -->
+                </select>
+                <input type="number" th:value="${transferAmount}" placeholder="0€"  id="transferAmount" name="transferAmount"
+                       min="0" style="text-align: right;" class="formMargin">
+                <!-- name=transferAmount est le nom exact d'un des attributs de l'objet attendu par le controleur (dans l'objet moneyTransactionDto) -->
 
-                            <button type="submit" class="btn btn-success btn-sm">Pay</button>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
+                <button type="submit" class="btn btn-success btn-sm" class="formMargin">Pay</button>
+            </form>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-9"><h5>My Transaction</h5></div>
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th scope="col" class="text-center">Connections</th>
-                    <th scope="col" class="text-center">Description</th>
-                    <th scope="col" class="text-center">Amount</th>
-                </tr>
-                <tr th:each="moneyTransaction : ${moneyTransactions}">
-                    <td th:text="${moneyTransaction.receiver.firstName}"></td>
-                    <td th:text="${moneyTransaction.description}"></td>
-                    <td th:text="${moneyTransaction.amount}"></td>
-                </tr>
-            </table>
-        </div>
+    <div class="container mt-5 mb-3">
+        <div><h5>My Transaction</h5></div>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th scope="col" class="text-center bg-success">Connections</th>
+                <th scope="col" class="text-center bg-success">Description</th>
+                <th scope="col" class="text-center bg-success">Amount</th>
+            </tr>
+            <tr th:each="moneyTransaction : ${moneyTransactions}">
+                <td th:text="${moneyTransaction.receiver.firstName}"></td>
+                <td th:text="${moneyTransaction.description}"></td>
+                <td th:text="${moneyTransaction.amount}"></td>
+            </tr>
+        </table>
     </div>
 </div>
 </html>
