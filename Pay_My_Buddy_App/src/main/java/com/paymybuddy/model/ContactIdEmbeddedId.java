@@ -13,6 +13,8 @@ public class ContactIdEmbeddedId implements Serializable {
     @Column(name = "other_email")
     private String otherEmail;
 
+    public ContactIdEmbeddedId() {
+    }
     public ContactIdEmbeddedId(String originEmail, String otherEmail) {
         this.originEmail = originEmail;
         this.otherEmail = otherEmail;

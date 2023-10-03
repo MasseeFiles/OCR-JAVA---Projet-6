@@ -7,8 +7,6 @@ import com.paymybuddy.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class MoneyTransactionService {
     private UserRepository userRepository;
@@ -25,7 +23,7 @@ public class MoneyTransactionService {
         float transferAmount = moneyTransaction.getAmount();
 
         String giverEmail = moneyTransaction.getGiverEmail();
-        User giverToCheck = new User("giverEmail1" , "passGiverEmail" , 5000f);
+        User giverToCheck = new User("giverEmail1", "pass3", "first", 5000f);
 
 //        User giverToCheck = userRepository.findById(giverEmail)
 //                .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
@@ -51,9 +49,6 @@ public class MoneyTransactionService {
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
 
-
-            User receiverToUpdate = new User("bob", "pass1", 5000f);
-
 //            User receiverToUpdate = userRepository.findById(receiverEmail)
 //                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));    //.orElseThrow converti l'optional en User
 
@@ -65,6 +60,7 @@ public class MoneyTransactionService {
 //            User receiverToUpdate = optionalReceiver.get();
 //            }
 
+            User receiverToUpdate = new User(receiverEmail, "pass1", "first", 5000f);
             float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;
             receiverToUpdate.setBalance(newBalanceReceiver);

@@ -6,8 +6,6 @@ import com.paymybuddy.model.MoneyTransactionDto;
 import com.paymybuddy.model.User;
 import com.paymybuddy.repository.ContactRepository;
 import com.paymybuddy.repository.MoneyTransactionRepository;
-import com.paymybuddy.repository.UserRepository;
-import com.paymybuddy.service.ContactService;
 import com.paymybuddy.service.MoneyTransactionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,13 +55,13 @@ public class MoneyTransactionController {
 
         MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
         String giverEmailToAdd = ("giverEmail1");    // rechercher dans BDD de giverEmail avec nameContact du DTO
+
         moneyTransactionToAdd.setGiverEmail(giverEmailToAdd);
 
-        //Conversion d'un moneyTransactionDto en un moneyTransaction
-        String receiverEmailToAdd = (moneyTransactionDto.getContactIdEmbeddedIdOtherEmail());
+        //Passage des données d'un moneyTransactionDto à un moneyTransaction
+        String receiverEmailToAdd = moneyTransactionDto.getContactIdEmbeddedIdOtherEmail();
         User userReceiver = new User();
         userReceiver.setUserEmail(receiverEmailToAdd);
-
         moneyTransactionToAdd.setReceiver(userReceiver);
 
         moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
@@ -78,5 +76,4 @@ public class MoneyTransactionController {
         }
     }
 }
-
 

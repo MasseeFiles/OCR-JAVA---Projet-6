@@ -21,13 +21,13 @@ public class User {
     //@NotBlank(message = "Password is mandatory")
 
     @Column()
-    private String firstName;  //a initialiser lors d'instanciation
+    private String firstName;
 
     @Column()
-    private String lastName;  //a initialiser lors d'instanciation
+    private String lastName;
 
     @Column(name = "balance")
-    private float balance;  //a initialiser lors d'instanciation
+    private float balance;
 
     @OneToMany( //definit impact de l'action d'une entity sur entity jointe (User et Contact) - attributs dessous reglent des situations particulieres
             cascade = CascadeType.ALL,       //suppression de User entraine suppressionn des objets contact associés
@@ -37,11 +37,14 @@ public class User {
     @JoinColumn(name = "origin_email" )    //doit specifier nom de clef etrangere
     private List<Contact> contacts = new ArrayList<Contact>();
 
+    // Constructeurs
     public User() {
     }
-    public User(String userEmail, String password , float balance) {
+
+    public User(String userEmail , String password , String firstName , float balance) {
         this.userEmail = userEmail;
         this.password = password;
-
+        this.firstName = firstName;
+        this.balance = balance;
     }
 }
