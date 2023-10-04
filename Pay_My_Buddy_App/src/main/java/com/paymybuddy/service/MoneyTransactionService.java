@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MoneyTransactionService {
-    private UserRepository userRepository;
-    private MoneyTransactionRepository moneyTransactionRepository;
+    private final UserRepository userRepository;
+    private final MoneyTransactionRepository moneyTransactionRepository;
 
     public MoneyTransactionService(UserRepository userRepository, MoneyTransactionRepository moneyTransactionRepository) {
         this.userRepository = userRepository;
@@ -23,10 +23,9 @@ public class MoneyTransactionService {
         float transferAmount = moneyTransaction.getAmount();
 
         String giverEmail = moneyTransaction.getGiverEmail();
-        User giverToCheck = new User("giverEmail1", "pass3", "first", 5000f);
 
-//        User giverToCheck = userRepository.findById(giverEmail)
-//                .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
+        User giverToCheck = userRepository.findById(giverEmail)
+                .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
 
 //                      Equivaut à
 //        Optional<User> optionalGiver = userRepository.findById(giverEmail);
@@ -35,7 +34,6 @@ public class MoneyTransactionService {
 //        } else {
 //        User giverToCheck = optionalGiver.get();
 //        }
-//
 
         float balanceGiver = giverToCheck.getBalance();
 
@@ -49,8 +47,8 @@ public class MoneyTransactionService {
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
 
-//            User receiverToUpdate = userRepository.findById(receiverEmail)
-//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail)));    //.orElseThrow converti l'optional en User
+            User receiverToUpdate = userRepository.findById(receiverEmail)
+                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail));    //.orElseThrow converti l'optional en User
 
 //                    Equivaut à
 //            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
@@ -60,7 +58,6 @@ public class MoneyTransactionService {
 //            User receiverToUpdate = optionalReceiver.get();
 //            }
 
-            User receiverToUpdate = new User(receiverEmail, "pass1", "first", 5000f);
             float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;
             receiverToUpdate.setBalance(newBalanceReceiver);
