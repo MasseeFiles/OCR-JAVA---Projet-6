@@ -25,12 +25,15 @@ public class LoginController {  //uniquement validation email/password
     }
 
     @PostMapping("/login")
-    public String processLogin(Model model , LoginDto loginDto){
+    public String processLogin(Model model){
 
-        logger.info("Requete pour la validation du login de l'utilisateur : " + loginDto.getUserEmail());
+//        logger.info("Requete pour la validation du login de l'utilisateur : " + loginDto.getUserEmail());
+//        logger.info("Requete pour la validation du login de l'utilisateur : " + userEmail);
 
 
-        return "redirect:/transfer";
+//        return "redirect:/transfer";
+                return "transfer";
+
     }
     /*public String validate(@Valid User user, BindingResult result, Model model) {
         if (!result.hasErrors()) {

@@ -54,7 +54,7 @@ public class MoneyTransactionController {
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
         MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
-        String giverEmailToAdd = ("giverEmail1");    // rechercher dans BDD de giverEmail avec nameContact du DTO
+        String giverEmailToAdd = ("giverEmail1");    // rechercher dans BDD de giverEmail à faire avec spring security
 
         moneyTransactionToAdd.setGiverEmail(giverEmailToAdd);
 
