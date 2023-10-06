@@ -33,13 +33,13 @@ public class MoneyTransactionController {
     public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
-        //insertion des moneyTransactions dans la BDD h2
+        //insertion des données de la BDD dans la vue via thymeleaf
 
         //methode 1 - transformation d'un iterable en collection (list)
         List<MoneyTransaction> moneyTransactions = (List<MoneyTransaction>) moneyTransactionRepository.findAll();
         model.addAttribute("moneyTransactions", moneyTransactions);
 
-        //methode 2
+        //methode 2  - transformation d'un iterable en collection (list)
         List<Contact> contacts = new ArrayList<Contact>();
         Iterable<Contact> iterable = contactRepository.findAll();
         iterable.forEach(contacts::add);
