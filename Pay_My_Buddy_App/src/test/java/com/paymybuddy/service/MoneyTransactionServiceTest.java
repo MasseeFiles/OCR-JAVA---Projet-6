@@ -111,10 +111,10 @@ class MoneyTransactionServiceTest {
         //WHEN
 
         //THEN
-        assertThrows(RuntimeException.class, () -> paymentservice.allowPayment(moneyTransaction));
         assertThatThrownBy(() -> paymentservice.allowPayment(moneyTransaction))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("User giver not found : Id used ");
 
     }
+    //TODO faire test avec receiver not found
 }

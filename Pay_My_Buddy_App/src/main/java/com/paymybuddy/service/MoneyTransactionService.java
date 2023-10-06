@@ -25,7 +25,7 @@ public class MoneyTransactionService {
         String giverEmail = moneyTransaction.getGiverEmail();
 
         User giverToCheck = userRepository.findById(giverEmail)
-                .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
+                .orElseThrow(() -> new RuntimeException("User giver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
 
 //                      Equivaut à
 //        Optional<User> optionalGiver = userRepository.findById(giverEmail);

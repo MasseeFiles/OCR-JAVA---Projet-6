@@ -7,6 +7,7 @@ import com.paymybuddy.model.User;
 import com.paymybuddy.repository.ContactRepository;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -14,10 +15,10 @@ import java.util.Arrays;
 @Service
 public class DataInsertService {
     //Constructeur
-    public DataInsertService(ContactRepository contactRepository, MoneyTransactionRepository moneyTransactionRepository, UserRepository userRepository) {
+    public DataInsertService(ContactRepository contactRepository, MoneyTransactionRepository moneyTransactionRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
         User[] users = new User[4];
-        users[0] = new User("giverEmail1", "pass1", "nameUser1" , 5000f);
+        users[0] = new User("giverEmail1", bCryptPasswordEncoder.encode("pass1"), "nameUser1" , 5000f);
         users[1] = new User("giverEmail2", "pass2", "nameUser2" , 200f);
         users[2] = new User("giverEmail3", "pass3", "nameUser3" , 0f);
         users[3] = new User("giverEmail4", "pass4", "nameUser4" , 5000f);
