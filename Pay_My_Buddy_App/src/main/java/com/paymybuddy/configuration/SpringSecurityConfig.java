@@ -20,12 +20,11 @@ import static org.springframework.security.authorization.AuthenticatedAuthorizat
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
-    // 3 interfaces à implementer sous forme de beans : filterChain , userDetailsService , configureglobal
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //configuration de quels filtres seront appliqués à quelles requetes url
-        //.authenticated applique les filtres par defaut, du authorisationanager par defaut??
-        //ok pouir creer ( dofilter() ) et ajouter des filtres customizés
+        //procedure de filtrage definie dans configureGlobal() avec jdbcAuthentication
+        //ok pour creer ( dofilter() ) et ajouter des filtres customizés
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/transfer", "/transferRequest").authenticated()
@@ -40,26 +39,19 @@ public class SpringSecurityConfig {
                 );
         return http.build();
     }
-
-    //  synthaxe pour le raccordement à une datasource particulière (datasoource)
-    //  public UserDetailsService userDetailsService(DataSource dataSource) {
-
-
+    //  Methode de configuration de SpringSecurity pour lui indiquer comment trouver les informations necessaire à la comparaison des données fournies par la vue (bdd interne).
+    @Autowired
+    void configureGlobal(DataSource pmbDataBase, AuthenticationManagerBuilder auth) throws Exception {  //parametre auth permet de configurer le mechanisme d'authentification
+        auth.jdbcAuthentication()   //methode particuliere pour authentification via une bdd (JDBC - Java Database Connectivity).
+            .dataSource(pmbDataBase)    //bdd à utiliser
+            .usersByUsernameQuery("SELECT user_email , password , true FROM users WHERE user_email = ?")
+            .authoritiesByUsernameQuery( "SELECT user_email , 'user' FROM users WHERE user_email = ?" )
+        ;
+    }
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-
-
-//         Methode de configuration de SpringSecurity pour vérifier l'existence de l'utilisateur dans le référentiel BDD (authentification) et recuperer son niveau d'authorisation (user, admin).
-    @Autowired
-    void configureGlobal(DataSource pmbDataBase, AuthenticationManagerBuilder auth) throws Exception {
-        //AuthenticationManagerBuilder permet de creer un AuthenticationManager (procedure a suivre pour authentifier et ou trouver les informations a verifier
-        auth.jdbcAuthentication().dataSource(pmbDataBase)
-            .usersByUsernameQuery("select user_email , password , true from users where user_email = ?")
-            .authoritiesByUsernameQuery( "select user_email , 'user' from users where user_email = ?" )
-        ;
-    }
 
 }

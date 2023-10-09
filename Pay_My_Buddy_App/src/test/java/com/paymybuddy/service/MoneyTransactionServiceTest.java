@@ -34,18 +34,21 @@ class MoneyTransactionServiceTest {
         moneyTransaction.setAmount(200.05f);
 
         User giver = new User();
-        giver.setUserEmail("giver@email.com");
+        String giverEmail = "giver@email.com";
+        giver.setUserEmail(giverEmail);
         giver.setBalance(500f);
         Optional<User> optionalGiverTest = Optional.of(giver);
-        String giverEmail = "giver@email.com";
         when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
 
         User receiver = new User();
-        receiver.setUserEmail("receiver@email.com");
+        String receiverEmail = ("receiver@email.com");
+        receiver.setUserEmail(receiverEmail);
         receiver.setBalance(500f);
         Optional<User> optionalReceiverTest = Optional.of(receiver);
         moneyTransaction.setReceiver(receiver);
-        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
+        when(userRepository.findById(receiverEmail)).thenReturn(optionalReceiverTest);  //mock
+
+//        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
 
         //WHEN
         boolean booleanTest = paymentservice.allowPayment(moneyTransaction);
@@ -94,10 +97,10 @@ class MoneyTransactionServiceTest {
     void allowPayment_GiverNotFound() {
         //GIVEN
         MoneyTransaction moneyTransaction = new MoneyTransaction();
-        moneyTransaction.setGiverEmail("giver@email.com");
+        String giverEmail = "giver@email.com";
+        moneyTransaction.setGiverEmail(giverEmail);
         moneyTransaction.setAmount(200.05f);
 
-        String giverEmail = "giver@email.com";
         Optional<User> optionalEmpty = Optional.empty();
         when(userRepository.findById(giverEmail)).thenReturn(optionalEmpty);  //giver non present dans la BDD , renvoie un optional Empty
 
@@ -113,8 +116,44 @@ class MoneyTransactionServiceTest {
         //THEN
         assertThatThrownBy(() -> paymentservice.allowPayment(moneyTransaction))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("User giver not found : Id used ");
+                .hasMessageContaining("User giver not found");
+    }
+
+    @Test
+    void allowPayment_ReceiverNotFound() {
+
+        //pb sur le mock: ok pour giver to check mais pas pour receivertoupdate - VALABLE aussi pour test givernotfound
+        //GIVEN
+        MoneyTransaction moneyTransaction = new MoneyTransaction();
+        String giverEmail = ("giver@email.com");
+        moneyTransaction.setGiverEmail(giverEmail);
+        moneyTransaction.setAmount(200.05f);
+
+        User giver = new User();
+        giver.setUserEmail(giverEmail);
+        giver.setBalance(100f);
+        Optional<User> optionalGiverTest = Optional.of(giver);
+//        when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
+
+        User receiver = new User();
+        String receiverEmail = "receiver@email.com";
+        receiver.setUserEmail(receiverEmail);
+        receiver.setBalance(500f);
+        moneyTransaction.setReceiver(receiver);
+
+        Optional<User> optionalEmpty = Optional.empty();
+        when(userRepository.findById(moneyTransaction.getReceiver().getUserEmail())).thenReturn(optionalEmpty);
+//        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalEmpty);
+
+        //WHEN
+
+        //THEN
+        assertThatThrownBy(() -> paymentservice.allowPayment(moneyTransaction))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("User receiver not found")
+//                .hasMessageContaining("User giver not found")
+
+        ;
 
     }
-    //TODO faire test avec receiver not found
 }

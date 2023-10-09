@@ -47,7 +47,7 @@ public class MoneyTransactionService {
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
 
-            User receiverToUpdate = userRepository.findById(receiverEmail)
+            User receiverToUpdate = userRepository.findById(moneyTransaction.getReceiver().getUserEmail())
                     .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail));    //.orElseThrow converti l'optional en User
 
 //                    Equivaut à

@@ -65,13 +65,15 @@ public class MoneyTransactionController {
         moneyTransactionToAdd.setReceiver(userReceiver);
 
         moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
-        // pas d'ajout de description dans une nouvelle moneyTransaction
 
         try {
             moneyTransactionService.allowPayment(moneyTransactionToAdd);
+
             return "redirect:/transfer";
         } catch (RuntimeException ex) {
+
             logger.warn("Impossible d'ajouter la moneyTransaction " + moneyTransactionToAdd, ex);
+
             return "redirect:/transfer";
         }
     }
