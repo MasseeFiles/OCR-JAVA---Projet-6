@@ -29,8 +29,8 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/transfer", "/transferRequest").authenticated()
                 )
+                //TODO : enlever les appels aux images logo et favicon du context spring security pour eviter 3 loggers  ("Requete pour l'affichage de la page HTML login");
                 .formLogin((form) -> form
-                        //applique le filtre authorizationFilter
                         .loginPage("/login")
                         .usernameParameter("userEmail") //definit dans le form la valeur considérée par spring comme un username
                         .passwordParameter("password")
@@ -45,7 +45,7 @@ public class SpringSecurityConfig {
         auth.jdbcAuthentication()   //methode particuliere pour authentification via une bdd (JDBC - Java Database Connectivity).
             .dataSource(pmbDataBase)    //bdd à utiliser
             .usersByUsernameQuery("SELECT user_email , password , true FROM users WHERE user_email = ?")
-            .authoritiesByUsernameQuery( "SELECT user_email , 'user' FROM users WHERE user_email = ?" )
+            .authoritiesByUsernameQuery("SELECT user_email , 'user' FROM users WHERE user_email = ?")
         ;
     }
     @Bean

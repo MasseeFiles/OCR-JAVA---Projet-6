@@ -10,12 +10,15 @@ import com.paymybuddy.service.MoneyTransactionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -29,21 +32,36 @@ public class MoneyTransactionController {
     @Autowired
     private MoneyTransactionRepository moneyTransactionRepository;
 
+    //  enpoint get sert uniquement à l'insertion des données de la BDD dans la vue (via thymeleaf)
     @GetMapping("/transfer")
-    public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue
+    public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue via thymeleaf
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
-        //insertion des données de la BDD dans la vue via thymeleaf
+
+        String userEmailAuthenticated;
+
+        //methode 1 - recuperation userEmailAuthenticated (si ok, autentification ok)
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            userEmailAuthenticated = ((UserDetails) principal).getUsername();
+        } else {
+            userEmailAuthenticated = principal.toString();
+        }
+        //methode 2
+//        userEmailAuthenticated = SecurityContextHolder.getContext().toString();
+
+
+
 
         //methode 1 - transformation d'un iterable en collection (list)
-        List<MoneyTransaction> moneyTransactions = (List<MoneyTransaction>) moneyTransactionRepository.findAll();
-        model.addAttribute("moneyTransactions", moneyTransactions);
+        List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllById(Collections.singleton(userEmailAuthenticated));
+        model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
-        //methode 2  - transformation d'un iterable en collection (list)
-        List<Contact> contacts = new ArrayList<Contact>();
-        Iterable<Contact> iterable = contactRepository.findAll();
-        iterable.forEach(contacts::add);
-        model.addAttribute("contacts", contacts);
+        //methode 2
+        List<Contact> contactsAuthenticated = new ArrayList<Contact>();
+        Iterable<Contact> iterable = contactRepository.findAllById(Collections.singleton(userEmailAuthenticated));
+        iterable.forEach(contactsAuthenticated::add);
+        model.addAttribute("contacts", contactsAuthenticated);
 
         return "transfer";
     }
@@ -53,10 +71,10 @@ public class MoneyTransactionController {
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
-        MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
-        String giverEmailToAdd = ("giverEmail1");    // rechercher dans BDD de giverEmail à faire avec spring security
+        String userEmailAuthenticated = SecurityContextHolder.getContext().toString();
 
-        moneyTransactionToAdd.setGiverEmail(giverEmailToAdd);
+        MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
+        moneyTransactionToAdd.setGiverEmail(userEmailAuthenticated);
 
         //Passage des données d'un moneyTransactionDto à un moneyTransaction
         String receiverEmailToAdd = moneyTransactionDto.getContactIdEmbeddedIdOtherEmail();
