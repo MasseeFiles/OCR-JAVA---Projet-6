@@ -48,8 +48,6 @@ class MoneyTransactionServiceTest {
         moneyTransaction.setReceiver(receiver);
         when(userRepository.findById(receiverEmail)).thenReturn(optionalReceiverTest);  //mock
 
-//        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
-
         //WHEN
         boolean booleanTest = paymentservice.allowPayment(moneyTransaction);
 
@@ -121,8 +119,6 @@ class MoneyTransactionServiceTest {
 
     @Test
     void allowPayment_ReceiverNotFound() {
-
-        //pb sur le mock: ok pour giver to check mais pas pour receivertoupdate - VALABLE aussi pour test givernotfound
         //GIVEN
         MoneyTransaction moneyTransaction = new MoneyTransaction();
         String giverEmail = ("giver@email.com");
@@ -131,9 +127,9 @@ class MoneyTransactionServiceTest {
 
         User giver = new User();
         giver.setUserEmail(giverEmail);
-        giver.setBalance(100f);
+        giver.setBalance(500f);
         Optional<User> optionalGiverTest = Optional.of(giver);
-//        when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
+        when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
 
         User receiver = new User();
         String receiverEmail = "receiver@email.com";
@@ -142,8 +138,7 @@ class MoneyTransactionServiceTest {
         moneyTransaction.setReceiver(receiver);
 
         Optional<User> optionalEmpty = Optional.empty();
-        when(userRepository.findById(moneyTransaction.getReceiver().getUserEmail())).thenReturn(optionalEmpty);
-//        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalEmpty);
+        when(userRepository.findById(receiverEmail)).thenReturn(optionalEmpty); // receiver non present dans la BDD , renvoie un optional Empty
 
         //WHEN
 
@@ -151,9 +146,6 @@ class MoneyTransactionServiceTest {
         assertThatThrownBy(() -> paymentservice.allowPayment(moneyTransaction))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("User receiver not found")
-//                .hasMessageContaining("User giver not found")
-
         ;
-
     }
 }

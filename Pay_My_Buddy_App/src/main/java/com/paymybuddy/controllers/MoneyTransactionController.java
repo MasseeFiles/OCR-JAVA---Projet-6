@@ -17,9 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MoneyTransactionController {
@@ -38,36 +40,49 @@ public class MoneyTransactionController {
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
 
+        SecurityContextHolder security = new SecurityContextHolder(); // a retirer - suivi en mode debug
+
         String userEmailAuthenticated;
 
-        //methode 1 - recuperation userEmailAuthenticated (si ok, autentification ok)
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            userEmailAuthenticated = ((UserDetails) principal).getUsername();
-        } else {
-            userEmailAuthenticated = principal.toString();
-        }
-        //methode 2
+        //methode 1 - recuperation userEmailAuthenticated (ok si authentification reussie)
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            userEmailAuthenticated = ((UserDetails) principal).getUsername();
+//        } else {
+//            userEmailAuthenticated = principal.toString();
+//        }
+//
+//        methode 2
 //        userEmailAuthenticated = SecurityContextHolder.getContext().toString();
 
+        //methode 3
+        userEmailAuthenticated = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
 
+//        //methode 1 - transformation d'un iterable en collection (list)
+        List<MoneyTransaction> moneyTransactionsAuthenticated = new ArrayList<MoneyTransaction>();
 
-        //methode 1 - transformation d'un iterable en collection (list)
-        List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllById(Collections.singleton(userEmailAuthenticated));
-        model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
+        Iterable<MoneyTransaction> iterableMoneyTransaction = moneyTransactionRepository.findAllById(Collections.singleton(userEmailAuthenticated));
+        iterableMoneyTransaction.forEach(moneyTransactionsAuthenticated::add);
+        model.addAttribute("contacts", moneyTransactionsAuthenticated);
 
-        //methode 2
-        List<Contact> contactsAuthenticated = new ArrayList<Contact>();
-        Iterable<Contact> iterable = contactRepository.findAllById(Collections.singleton(userEmailAuthenticated));
-        iterable.forEach(contactsAuthenticated::add);
-        model.addAttribute("contacts", contactsAuthenticated);
+        // ne marche pas
+//        List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllById(Collections.singleton(userEmailAuthenticated));
+//        model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
+//        //methode 2
+//        List<Contact> contactsAuthenticated = new ArrayList<Contact>();
+//        Iterable<Contact> iterable = contactRepository.findAllById(Collections.singleton(userEmailAuthenticated));
+//        iterable.forEach(contactsAuthenticated::add);
+//        model.addAttribute("contacts", contactsAuthenticated);
+//
         return "transfer";
     }
 
     @PostMapping("/transferRequest")
     public String processPayment(Model model, MoneyTransactionDto moneyTransactionDto) {    //valeur renvoyée est une string qui indique une view à afficher
+
+        SecurityContextHolder security = new SecurityContextHolder(); // a retirer - suivi en mode debug
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 

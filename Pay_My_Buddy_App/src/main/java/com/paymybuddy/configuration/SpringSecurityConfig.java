@@ -23,7 +23,6 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //configuration de quels filtres seront appliqués à quelles requetes url
-        //procedure de filtrage definie dans configureGlobal() avec jdbcAuthentication
         //ok pour creer ( dofilter() ) et ajouter des filtres customizés
         http
                 .authorizeHttpRequests((requests) -> requests
@@ -39,9 +38,9 @@ public class SpringSecurityConfig {
                 );
         return http.build();
     }
-    //  Methode de configuration de SpringSecurity pour lui indiquer comment trouver les informations necessaire à la comparaison des données fournies par la vue (bdd interne).
+    //  Methode de configuration de SpringSecurity pour lui indiquer comment trouver les informations necessaires à l'authentification (comparaison des données fournies par la vue / bdd interne).
     @Autowired
-    void configureGlobal(DataSource pmbDataBase, AuthenticationManagerBuilder auth) throws Exception {  //parametre auth permet de configurer le mechanisme d'authentification
+    void configureGlobal(DataSource pmbDataBase, AuthenticationManagerBuilder auth) throws Exception {  //parametre auth permet de configurer le mechanisme d'authentification - configuration d'un filtre particulier
         auth.jdbcAuthentication()   //methode particuliere pour authentification via une bdd (JDBC - Java Database Connectivity).
             .dataSource(pmbDataBase)    //bdd à utiliser
             .usersByUsernameQuery("SELECT user_email , password , true FROM users WHERE user_email = ?")

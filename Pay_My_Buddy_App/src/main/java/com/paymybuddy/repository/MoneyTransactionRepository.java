@@ -8,3 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface MoneyTransactionRepository extends CrudRepository<MoneyTransaction, String> { // Lien à l'entité MoneyTransaction
 }
 
+
