@@ -99,7 +99,21 @@ public class MoneyTransactionController {
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
-        String userEmailAuthenticated = SecurityContextHolder.getContext().toString();
+
+        String userEmailAuthenticated;
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            userEmailAuthenticated = ((UserDetails) principal).getUsername();
+        } else {
+            userEmailAuthenticated = principal.toString();
+        }
+
+
+
+
+
+
 
         MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
         moneyTransactionToAdd.setGiverEmail(userEmailAuthenticated);
