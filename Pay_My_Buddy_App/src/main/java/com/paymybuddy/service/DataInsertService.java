@@ -38,6 +38,11 @@ public class DataInsertService {
 
         MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
         User userReceiver = new User("userMoneyTransactionEmail", "userMoneyTransactionPassword","nameReceiver",  200f);
+        User userReceiver2 = new User("userMoneyTransactionEmail", "userMoneyTransactionPassword","nameReceiver",  200f);
+        User userReceiver3 = new User("userMoneyTransactionEmail", "userMoneyTransactionPassword","nameReceiver",  200f);
+        User userReceiver4 = new User("userMoneyTransactionEmail", "userMoneyTransactionPassword","nameReceiver",  200f);
+
+
         userRepository.save(userReceiver);
         moneyTransactions[0] = new MoneyTransaction("giverEmail1", userReceiver, "description1", 15);
         moneyTransactions[1] = new MoneyTransaction("giverEmail2", userReceiver, "description2", 456);
