@@ -14,11 +14,9 @@ public class User {
     @Id //specifie le field à utiliser en PK
     @Column(name = "user_email")
     private String userEmail;
-    //@NotBlank(message = "Username is mandatory")    //dependance maven à ajouter ex: hibernate validator
 
     @Column(name = "password")
     private String password;
-    //@NotBlank(message = "Password is mandatory")
 
     @Column()
     private String firstName;
@@ -30,7 +28,7 @@ public class User {
     private float balance;
 
     @OneToMany( //definit impact de l'action d'une entity sur entity jointe (User et Contact) - attributs dessous reglent des situations particulieres
-            cascade = CascadeType.ALL,       //suppression de User entraine suppressionn des objets contact associés
+            cascade = CascadeType.ALL,       //suppression de User entraine suppression des objets contact associés
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )

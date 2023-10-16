@@ -15,11 +15,9 @@ public class MoneyTransaction {
     @ManyToOne
     @JoinColumn(name = "receiver_email")
     private User receiver;
-    //@NotBlank(message = "Connection email is mandatory")
 
     @Column(name = "description")
     private String description;
-    //@NotBlank(message = "Connection name is mandatory")
 
     @Column(name = "amount")
     private float amount;

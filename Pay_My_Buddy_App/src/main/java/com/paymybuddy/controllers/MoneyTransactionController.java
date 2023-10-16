@@ -4,8 +4,8 @@ import com.paymybuddy.model.Contact;
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.MoneyTransactionDto;
 import com.paymybuddy.model.User;
-import com.paymybuddy.repository.ContactRepository;
 import com.paymybuddy.repository.MoneyTransactionRepository;
+import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.service.MoneyTransactionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,8 +25,9 @@ public class MoneyTransactionController {
 
     @Autowired
     private MoneyTransactionService moneyTransactionService;
+
     @Autowired
-    private ContactRepository contactRepository;
+    private UserRepository userRepository;
     @Autowired
     private MoneyTransactionRepository moneyTransactionRepository;
 
@@ -37,83 +37,28 @@ public class MoneyTransactionController {
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
 
-        SecurityContextHolder security = new SecurityContextHolder(); // a retirer - suivi en mode debug
+        String userEmailAuthenticated = getUserEmailAuthenticated();
 
-        String userEmailAuthenticated;
-
-        //methode 1 - recuperation userEmailAuthenticated (ok si authentification reussie)
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            userEmailAuthenticated = ((UserDetails) principal).getUsername();
-        } else {
-            userEmailAuthenticated = principal.toString();
-        }
-//
-//        methode 2
-//        userEmailAuthenticated = SecurityContextHolder.getContext().toString();
-
-        //methode 3
-//        userEmailAuthenticated = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-//        userEmailAuthenticated = ("giverEmail1");
-
-
-        List<MoneyTransaction> moneyTransactionsToSort = (List<MoneyTransaction>) moneyTransactionRepository.findAll();
-        List<MoneyTransaction> moneyTransactionsAuthenticated = new ArrayList<MoneyTransaction>();
-        for (MoneyTransaction moneyTransaction : moneyTransactionsToSort) {
-            if (moneyTransaction.getGiverEmail().equals(userEmailAuthenticated)) {
-                moneyTransactionsAuthenticated.add(moneyTransaction);
-            }
-        }
+        List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
         model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
-        List<Contact> contactsToSort = (List<Contact>) contactRepository.findAll();
-        List<Contact> contactsAuthenticated = new ArrayList<Contact>();
-        for (Contact contact : contactsToSort) {
-            if (contact.getContactIdEmbeddedId().getOriginEmail().equals(userEmailAuthenticated)) {
-                contactsAuthenticated.add(contact);
-            }
-        }
+        User userAuthenticated = userRepository.findById(userEmailAuthenticated)
+                .orElseThrow(() -> new RuntimeException("UserAuthenticated not found : Id used " + userEmailAuthenticated));
+        List<Contact> contactsAuthenticated = userAuthenticated.getContacts();
         model.addAttribute("contacts", contactsAuthenticated);
 
         return "transfer";
-
-            //        //methode 1 - transformation d'un iterable en collection (list)
-//        List<MoneyTransaction> moneyTransactionsAuthenticated = new ArrayList<MoneyTransaction>();
-
-//        Iterable<MoneyTransaction> iterableMoneyTransaction = moneyTransactionRepository.findAllById(Collections.singleton(userEmailAuthenticated));
-//        iterableMoneyTransaction.forEach(moneyTransactionsAuthenticated::add);
-//        model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
-
-//        //methode 2
-//        List<Contact> contactsAuthenticated = new ArrayList<Contact>();
-//        Iterable<Contact> iterable = contactRepository.findAllById(Collections.singleton(userEmailAuthenticated));
-//        iterable.forEach(contactsAuthenticated::add);
-//        model.addAttribute("contacts", contactsAuthenticated);
     }
 
     @PostMapping("/transferRequest")
     public String processPayment(Model model, MoneyTransactionDto moneyTransactionDto) {
         //valeur renvoyée est une string qui indique une view à afficher
 
-        SecurityContextHolder security = new SecurityContextHolder(); // a retirer - suivi en mode debug
+        SecurityContextHolder security = new SecurityContextHolder(); // A RETIRER - suivi en mode debug
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
-
-        String userEmailAuthenticated;
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            userEmailAuthenticated = ((UserDetails) principal).getUsername();
-        } else {
-            userEmailAuthenticated = principal.toString();
-        }
-
-
-
-
-
-
+        String userEmailAuthenticated = getUserEmailAuthenticated();
 
         MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
         moneyTransactionToAdd.setGiverEmail(userEmailAuthenticated);
@@ -128,7 +73,6 @@ public class MoneyTransactionController {
 
         try {
             moneyTransactionService.allowPayment(moneyTransactionToAdd);
-
             return "redirect:/transfer";
         } catch (RuntimeException ex) {
 
@@ -136,6 +80,18 @@ public class MoneyTransactionController {
 
             return "redirect:/transfer";
         }
+    }
+
+    private static String getUserEmailAuthenticated() {
+        String userEmailAuthenticated;
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            userEmailAuthenticated = ((UserDetails) principal).getUsername();
+        } else {
+            userEmailAuthenticated = principal.toString();
+        }
+        return userEmailAuthenticated;
     }
 }
 
