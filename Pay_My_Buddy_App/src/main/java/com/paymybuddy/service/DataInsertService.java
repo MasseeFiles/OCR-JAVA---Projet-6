@@ -18,22 +18,26 @@ public class DataInsertService {
     public DataInsertService(ContactRepository contactRepository, MoneyTransactionRepository moneyTransactionRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
         User[] users = new User[4];
-        users[0] = new User("giverEmail1", bCryptPasswordEncoder.encode("pass1") , "nameUser1" , 5000f);
-        users[1] = new User("giverEmail2", bCryptPasswordEncoder.encode("pass2") , "nameUser2" , 200f);
-        users[2] = new User("giverEmail3", bCryptPasswordEncoder.encode("pass3") , "nameUser3" , 0f);
-        users[3] = new User("giverEmail4", bCryptPasswordEncoder.encode("pass4") , "nameUser4" , 5000f);
+        users[0] = new User("giverEmail1", bCryptPasswordEncoder.encode("pass1") , "nameUser1" , 5000f);    //fred
+        users[1] = new User("giverEmail2", bCryptPasswordEncoder.encode("pass2") , "nameUser2" , 200f); //mike
+        users[2] = new User("giverEmail3", bCryptPasswordEncoder.encode("pass3") , "nameUser3" , 0f);   //cindy
+        users[3] = new User("giverEmail4", bCryptPasswordEncoder.encode("pass4") , "nameUser4" , 5000f);    //jack
         userRepository.saveAll(Arrays.asList(users));
 
-        Contact[] contacts = new Contact[4];
+        Contact[] contacts = new Contact[5];
         ContactIdEmbeddedId contactIdEmbeddedId1 = new ContactIdEmbeddedId("giverEmail1", "giverEmail4");
         ContactIdEmbeddedId contactIdEmbeddedId2 = new ContactIdEmbeddedId("giverEmail1", "giverEmail2");
         ContactIdEmbeddedId contactIdEmbeddedId3 = new ContactIdEmbeddedId("giverEmail1", "giverEmail3");
-        ContactIdEmbeddedId contactIdEmbeddedId4 = new ContactIdEmbeddedId("giverEmail1", "giverEmail4");
+        ContactIdEmbeddedId contactIdEmbeddedId4 = new ContactIdEmbeddedId("giverEmail2", "giverEmail4");
+        ContactIdEmbeddedId contactIdEmbeddedId5 = new ContactIdEmbeddedId("giverEmail2", "giverEmail3");
 
-        contacts[0] = new Contact("bob", contactIdEmbeddedId1);
+
+        contacts[0] = new Contact("jack", contactIdEmbeddedId1);
         contacts[1] = new Contact("mike", contactIdEmbeddedId2);
-        contacts[2] = new Contact("jack", contactIdEmbeddedId3);
-        contacts[3] = new Contact("cindy", contactIdEmbeddedId4);
+        contacts[2] = new Contact("cindy", contactIdEmbeddedId3);
+        contacts[3] = new Contact("friend of mike - jack", contactIdEmbeddedId4);
+        contacts[4] = new Contact("friend of mike - cindy", contactIdEmbeddedId5);
+
         contactRepository.saveAll(Arrays.asList(contacts));
 
         MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
