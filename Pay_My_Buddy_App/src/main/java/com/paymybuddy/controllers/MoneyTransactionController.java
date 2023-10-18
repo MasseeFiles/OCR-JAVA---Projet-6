@@ -7,6 +7,7 @@ import com.paymybuddy.model.User;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.service.MoneyTransactionService;
+import com.paymybuddy.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class MoneyTransactionController {
     private MoneyTransactionService moneyTransactionService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private MoneyTransactionRepository moneyTransactionRepository;
@@ -37,7 +41,7 @@ public class MoneyTransactionController {
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
 
-        String userEmailAuthenticated = getUserEmailAuthenticated();
+        String userEmailAuthenticated = userService.getUserEmailAuthenticated();
 
         List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
         model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
@@ -54,11 +58,10 @@ public class MoneyTransactionController {
     public String processPayment(Model model, MoneyTransactionDto moneyTransactionDto) {
         //valeur renvoyée est une string qui indique une view à afficher
 
-        SecurityContextHolder security = new SecurityContextHolder(); // A RETIRER - suivi en mode debug
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
-        String userEmailAuthenticated = getUserEmailAuthenticated();
+        String userEmailAuthenticated = userService.getUserEmailAuthenticated();
 
         MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
         moneyTransactionToAdd.setGiverEmail(userEmailAuthenticated);
@@ -82,17 +85,7 @@ public class MoneyTransactionController {
         }
     }
 
-    private static String getUserEmailAuthenticated() {
-        String userEmailAuthenticated;
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            userEmailAuthenticated = ((UserDetails) principal).getUsername();
-        } else {
-            userEmailAuthenticated = principal.toString();
-        }
-        return userEmailAuthenticated;
-    }
 }
 
 

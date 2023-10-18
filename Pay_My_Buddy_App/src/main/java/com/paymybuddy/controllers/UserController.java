@@ -15,7 +15,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //ENDPOINT
     @PostMapping(value = "/user")
     public String addUser(User userToAdd) {    //valeur renvoyée est une string qui indique une view à afficher
         logger.info("Requete pour la sauvegarde du User: " + userToAdd);
