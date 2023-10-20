@@ -1,6 +1,7 @@
 package com.paymybuddy.service;
 
 import com.paymybuddy.controllers.MoneyTransactionController;
+import com.paymybuddy.model.MoneyTransactionDto;
 import com.paymybuddy.model.User;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
@@ -21,29 +22,16 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-//@WebMvcTest(MoneyTransactionController.class) //autoconfigure mockmvc + autre parametres necerssaire à tests
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MoneyTransactionControllerTest {
+public class MoneyTransactionControllerTest {       //Tests d'integration!!!
     @Autowired
     private MockMvc mockMvc;  //mock qui envoie les request http
-
-    @MockBean
-    private MoneyTransactionService moneyTransactionService;       //mock d'un collaborateur du controlleur
-    @MockBean
-    private UserService userService;        //mock d'un collaborateur du controlleur
-    @MockBean
-    private UserRepository userRepository;
-    @MockBean
-    private MoneyTransactionRepository moneyTransactionRepository;
-
-
-
 
     @Test
     void shouldCreateMockMvc() {
@@ -51,54 +39,63 @@ public class MoneyTransactionControllerTest {
     }
 
 
-    //methode 2 - perform
     @Test
-    @WithMockUser
-
+    @WithMockUser(username = "giverEmail1")
     void shouldReturnStatusOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders     //methode perform sert à envoyer la request lors du test
                         .get("/transfer"))
-                .andExpect(MockMvcResultMatchers
+                .andExpect(MockMvcResultMatchers    //methode andExpect() sert à definir les assertions. Renvoie un objet  ResultActions
                         .status().isOk())  //method status() pour le status http retourné
                 .andExpect(MockMvcResultMatchers
                         .view().name("transfer"));
     }
-}
+
+    @Test
+    @WithMockUser(username = "giverEmail1")
+    void shouldReturnListsNotEmpty() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/transfer"))
+                .andExpect(MockMvcResultMatchers
+                        .model().attributeExists("moneyTransactions"))  //verifier si liste???
+                .andExpect(MockMvcResultMatchers
+                        .model().attributeExists("contacts"));
+
+    }
 
 //    @Test
-//@WithMockUser
-
-//    void shouldReturnListsNotEmpty() throws Exception {
-//        this.mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/transfer"))
+//    @WithMockUser(username = "giverEmail1")
+//    void shouldUseAllowPaymentMethod() throws Exception {
+//        MoneyTransactionDto moneyTransactionDtoTest = new MoneyTransactionDto( "giverEmail2" ,  100);//ajout de constructeur- a enlever si necessaire
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .post("/transferRequest").param("moneyTransactionDtoTest"))   //PB / COMMETN PASSR LE PARAMETEE moneyTransactionDtoTest
 //                .andExpect(MockMvcResultMatchers
-//                        .model().attributeExists("moneyTransactions"))  //verifier si liste???
-//                .andExpect(MockMvcResultMatchers
-//                        .model().attributeExists("contacts"));
+//                        .view().name("redirect:/transfer"));
+//
+////        verify(userService).allowpayement(any(Moneytransaction.class)     //    assertion pour verification de l'appel de method allowpayement sur un objet service
 //    }
 
-// ppur mocker un collaborateur du controller  :
-//    @MockBean
-//        private UserService userService;
-
-//    assertion pour verification de appel d'une method sur un objet particulier - allow
-//    verify(userService).allowpayement(any(Moneutransaction.class)
-
-
-//    @BeforeEach
-//    public void configureSystemUnderTest() {
-//        moneyTransactionService = mock(MoneyTransactionService.class);
+//    @Test
+//    @WithMockUser(username = "giverEmail1")
+    //    void shouldThrowRuntimeException(){
 //
-//        MoneyTransactionController moneyTransactionControllerTested = new MoneyTransactionController();
-//        MockMvc mockMvc = MockMvcBuilders
-//                .standaloneSetup(moneyTransactionControllerTested)
-////          .setHandlerExceptionResolvers(exceptionResolver())
-////          .setLocaleResolver(fixedLocaleResolver())
-////          .setViewResolvers(jspViewResolver())
-//                .build();
+//    //THEN
+//    Throwable exception = assertThrows(
+//        RuntimeException.class,
+//            () -> {
+//                throw new RuntimeException("ex");
+//            }
+//    );
+//    assertEquals("Exception message", exception.getMessage());
+//}
 //
-//        requestBuilder = new PayMyBuddyRequestBuilder(mockMvc);   //introduction du mockmvc
+//        verify(userService).allowpayement(any(Moneytransaction.class)     //    assertion pour verification de l'appel de method allowpayement sur un objet service
 //    }
+}
+
+
+
+
+
 
 //methode 1 - requestBuilder
 
