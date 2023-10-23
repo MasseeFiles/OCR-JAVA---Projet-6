@@ -55,7 +55,7 @@ public class MoneyTransactionController {
     }
 
     @PostMapping("/transferRequest")
-    public String processPayment(Model model, MoneyTransactionDto moneyTransactionDto) {
+    public String processPayment(MoneyTransactionDto moneyTransactionDto) {
         //valeur renvoyée est une string qui indique une view à afficher
 
 
