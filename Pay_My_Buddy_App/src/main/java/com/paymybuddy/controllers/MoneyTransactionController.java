@@ -17,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -58,7 +60,6 @@ public class MoneyTransactionController {
     public String processPayment(MoneyTransactionDto moneyTransactionDto) {
         //valeur renvoyée est une string qui indique une view à afficher
 
-
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
         String userEmailAuthenticated = userService.getUserEmailAuthenticated();
@@ -84,8 +85,6 @@ public class MoneyTransactionController {
             return "redirect:/transfer";
         }
     }
-
-
 }
 
 
