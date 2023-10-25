@@ -10,7 +10,6 @@ import lombok.Data;
 public class Contact {
         @Column(name = "name_contact")
         private String nameContact;
-        //@NotBlank(message = "Connection name is mandatory")
 
         @EmbeddedId     //      clef primaire composite avec @EmbeddedId (originEmail et otherEmail)
         private ContactIdEmbeddedId contactIdEmbeddedId;
@@ -21,12 +20,4 @@ public class Contact {
                 this.nameContact = nameContact;
                 this.contactIdEmbeddedId = contactIdEmbeddedId;
         }
-/*      clef primaire composite avec @IdClass (originEmail et otherEmail)
-
-        @Id
-        private String originEmail;
-
-        @Id
-        private String otherEmail;
-         */
 }

@@ -17,7 +17,6 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //configuration de quels filtres seront appliqués à quelles requetes url
-        //ok pour creer ( dofilter() ) et ajouter des filtres customizés
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/transfer", "/transferRequest").authenticated()

@@ -37,7 +37,7 @@ public class MoneyTransactionController {
 
     //  enpoint get sert uniquement à l'insertion des données de la BDD dans la vue (via thymeleaf)
     @GetMapping("/transfer")
-    public String getTransfer(Model model) {    //parametre "Model" IMPORTANT :  permet de passer des données du controller à la vue via thymeleaf
+    public String getTransfer(Model model) {    //parametre "Model" permet de passer des données du controller à la vue via thymeleaf
 
         logger.info("Requete pour l'affichage de la page HTML transfer");
 
