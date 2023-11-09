@@ -7,15 +7,15 @@ import lombok.Data;
 import java.io.Serializable;
 @Data
 @Embeddable
-public class ContactIdEmbeddedId implements Serializable {
+public class ContactEmbeddedId implements Serializable {
     @Column(name = "origin_email")
     private String originEmail;
     @Column(name = "other_email")
     private String otherEmail;
 
-    public ContactIdEmbeddedId() {
+    public ContactEmbeddedId() {
     }
-    public ContactIdEmbeddedId(String originEmail, String otherEmail) {
+    public ContactEmbeddedId(String originEmail, String otherEmail) {
         this.originEmail = originEmail;
         this.otherEmail = otherEmail;
     }

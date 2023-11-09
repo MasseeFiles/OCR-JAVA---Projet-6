@@ -57,7 +57,7 @@
                     <!-- id et/ ou name correspond a valeur à mettre  dans le form (et donc dans l'objet java renvoyé???) -->
                     <option selected disabled>Select a connection</option>
 
-                    <option th:each="contact : ${contacts}" th:text="${contact.nameContact}" th:value="${contact.contactIdEmbeddedId.otherEmail}" ></option>
+                    <option th:each="contact : ${contacts}" th:text="${contact.nameContact}" th:value="${contact.contactEmbeddedId.otherEmail}" ></option>
 
                     <!-- th:text = le texte qui doit etre affiché pour l'option , th:value = la valeur qui est associée à l"element selectionné-->
 

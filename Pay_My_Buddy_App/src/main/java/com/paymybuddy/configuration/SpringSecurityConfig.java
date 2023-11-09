@@ -19,7 +19,7 @@ public class SpringSecurityConfig {
         //configuration de quels filtres seront appliqués à quelles requetes url
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/transfer", "/transferRequest" , "/contact" , "/user").authenticated()
+                        .requestMatchers("/transfer", "/transferRequest").authenticated()
                 )
                 //TODO : enlever les appels aux images logo et favicon du context spring security pour eviter 3 loggers  ("Requete pour l'affichage de la page HTML login");
                 .formLogin((form) -> form
@@ -34,9 +34,9 @@ public class SpringSecurityConfig {
 
     //  Methode de configuration de SpringSecurity pour lui indiquer comment trouver les informations necessaires à l'authentification (comparaison data données de la vue / bdd interne) et authorisation (recuperation du role du user).
     @Autowired
-    void configureGlobal(DataSource pmbDataBase, AuthenticationManagerBuilder auth) throws Exception {  //parametre auth permet de configurer le mechanisme d'authentification - configuration d'un filtre particulier
+    void configureGlobal(DataSource projectDataBase, AuthenticationManagerBuilder auth) throws Exception {  //parametre auth permet de configurer le mechanisme d'authentification - configuration d'un filtre particulier
         auth.jdbcAuthentication()   //methode particuliere pour authentification via une bdd (JDBC - Java Database Connectivity).
-                .dataSource(pmbDataBase)    //bdd à utiliser
+                .dataSource(projectDataBase)    //bdd à utiliser
                 .usersByUsernameQuery("SELECT user_email , password , true FROM users WHERE user_email = ?")
                 .authoritiesByUsernameQuery("SELECT user_email , 'user' FROM users WHERE user_email = ?")
         ;
