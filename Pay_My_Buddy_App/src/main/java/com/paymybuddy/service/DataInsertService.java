@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
-@Service
+//@Service
 public class DataInsertService {
     //Constructeur
     public DataInsertService(ContactRepository contactRepository, MoneyTransactionRepository moneyTransactionRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {

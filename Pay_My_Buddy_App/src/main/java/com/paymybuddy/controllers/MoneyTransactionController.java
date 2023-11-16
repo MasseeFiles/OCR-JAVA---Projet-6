@@ -52,7 +52,7 @@ public class MoneyTransactionController {
         return "transfer";
     }
 
-    @PostMapping("/transferRequest")
+    @PostMapping("/transfer")
     public String processPayment(MoneyTransactionDto moneyTransactionDto) {
         //valeur renvoyée est une string qui indique une view à afficher
 
@@ -64,7 +64,7 @@ public class MoneyTransactionController {
         moneyTransactionToAdd.setGiverEmail(userEmailAuthenticated);
 
         //Passage des données d'un moneyTransactionDto à un moneyTransaction
-        String receiverEmailToAdd = moneyTransactionDto.getContactIdEmbeddedIdOtherEmail();
+        String receiverEmailToAdd = moneyTransactionDto.getContactEmbeddedIdOtherEmail();
         User userReceiver = new User();
         userReceiver.setUserEmail(receiverEmailToAdd);
         moneyTransactionToAdd.setReceiver(userReceiver);

@@ -17,13 +17,13 @@ import static org.mockito.Mockito.when;
 class MoneyTransactionServiceTest {
     private UserRepository userRepository;
     private MoneyTransactionRepository moneyTransactionRepository;
-    private MoneyTransactionService paymentservice;
+    private MoneyTransactionService paymentService;
 
     @BeforeEach
     public void setup() {
         userRepository = mock(UserRepository.class);
         moneyTransactionRepository = mock(MoneyTransactionRepository.class);
-        paymentservice = new MoneyTransactionService(userRepository, moneyTransactionRepository);
+        paymentService = new MoneyTransactionService(userRepository, moneyTransactionRepository);
     }
 
     @Test
@@ -49,7 +49,7 @@ class MoneyTransactionServiceTest {
         when(userRepository.findById(receiverEmail)).thenReturn(optionalReceiverTest);  //mock
 
         //WHEN
-        boolean booleanTest = paymentservice.allowPayment(moneyTransaction);
+        boolean booleanTest = paymentService.allowPayment(moneyTransaction);
 
         //THEN
         assertTrue(booleanTest);
@@ -85,7 +85,7 @@ class MoneyTransactionServiceTest {
         when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
 
         //WHEN
-        boolean booleanTest = paymentservice.allowPayment(moneyTransaction);
+        boolean booleanTest = paymentService.allowPayment(moneyTransaction);
 
         //THEN
         assertFalse(booleanTest);
@@ -112,7 +112,7 @@ class MoneyTransactionServiceTest {
         //WHEN
 
         //THEN
-        assertThatThrownBy(() -> paymentservice.allowPayment(moneyTransaction))
+        assertThatThrownBy(() -> paymentService.allowPayment(moneyTransaction))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("User giver not found");
     }
@@ -143,7 +143,7 @@ class MoneyTransactionServiceTest {
         //WHEN
 
         //THEN
-        assertThatThrownBy(() -> paymentservice.allowPayment(moneyTransaction))
+        assertThatThrownBy(() -> paymentService.allowPayment(moneyTransaction))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("User receiver not found")
         ;

@@ -58,7 +58,7 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
         Float balanceReceiverInput = userRepository.findById("giverEmail2").map(user -> user.getBalance()).orElseThrow();
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/transferRequest")
+                .post("/transfer")
                 .param("contactIdEmbeddedIdOtherEmail", "giverEmail2")
                 .param("transferAmount", "100")
                 .with(csrf()));
@@ -74,7 +74,7 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
     @WithMockUser(username = "giverEmail1")
     void shouldReturnView_Redirect() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/transferRequest")
+                        .post("/transfer")
                         .param("contactIdEmbeddedIdOtherEmail", "giverEmail2")
                         .param("transferAmount", "100")
                         .with(csrf()))

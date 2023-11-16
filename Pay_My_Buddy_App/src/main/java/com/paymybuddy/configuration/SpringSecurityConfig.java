@@ -19,9 +19,9 @@ public class SpringSecurityConfig {
         //configuration de quels filtres seront appliqués à quelles requetes url
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/transfer", "/transferRequest").authenticated()
+                        .requestMatchers("/transfer").authenticated()
                 )
-                //TODO : enlever les appels aux images logo et favicon du context spring security pour eviter 3 loggers  ("Requete pour l'affichage de la page HTML login");
+                //MONTODO : enlever les appels aux images logo et favicon du context spring security pour eviter 3 loggers  ("Requete pour l'affichage de la page HTML login");
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .usernameParameter("userEmail") //definit dans le form la valeur considérée par spring comme un username
