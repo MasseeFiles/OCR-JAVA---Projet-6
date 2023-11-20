@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MoneyTransactionService {
+public class MoneyTransactionService { // interface a implementer
     private final UserRepository userRepository;
     private final MoneyTransactionRepository moneyTransactionRepository;
 
