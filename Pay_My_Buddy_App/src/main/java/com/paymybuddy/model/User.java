@@ -12,7 +12,10 @@ import java.util.List;
 public class User {
 
     @Id //specifie le field à utiliser en PK
-    @Column(name = "user_email")
+    @Column(name = "user_id")
+    private int userId;
+
+    @Column(name = "user_email" , unique = true)
     private String userEmail;
 
     @Column(name = "password")
@@ -39,10 +42,11 @@ public class User {
     public User() {
     }
 
-    public User(String userEmail , String password , String firstName , float balance) {
+    public User(String userEmail , String password , String firstName , String lastName, float balance) {
         this.userEmail = userEmail;
         this.password = password;
         this.firstName = firstName;
+        this.lastName = lastName;
         this.balance = balance;
     }
 }
