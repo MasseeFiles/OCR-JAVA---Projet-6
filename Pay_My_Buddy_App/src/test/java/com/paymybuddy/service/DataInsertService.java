@@ -12,21 +12,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
-//@Service
+@Service
 public class DataInsertService {
     //Constructeur
     public DataInsertService(ContactRepository contactRepository, MoneyTransactionRepository moneyTransactionRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
         User[] users = new User[4];
 
-        users[0] = new User("giverEmail1", "$2a$12$kVlFNkyutY6qXRyT/JRdUusQLZp6k1MXS47eeKDJh3PBtgHNof2sO" , "nameUser1" , 5000f);    //fred
-        //bCryptPasswordEncoder.encode("pass1")
-        users[1] = new User("giverEmail2", "$2a$12$Ko/Ai7TyQwfVAFYS42jfl.YeP01OpDIoU7b6spyMXz7FWbPC4XYWC" , "nameUser2" , 200f); //mike
-        //bCryptPasswordEncoder.encode("pass2")
-        users[2] = new User("giverEmail3", "$2a$12$xESGiGC8PVYoeMa3pC4TXOp/AYm8WVvuHqh5dTf6sbwN9c8nvNNRC", "nameUser3" , 0f);   //cindy
-        //bCryptPasswordEncoder.encode("pass3")
-        users[3] = new User("giverEmail4", "$2a$12$DxOiBwpuYZStOBfhzYvWWeEzZFcg96WLgMIOMwNLfkWPgtlf7qzb2" , "nameUser4" , 5000f);    //jack
-        //bCryptPasswordEncoder.encode("pass4")
+        users[0] = new User("giverEmail1", "$2a$12$kVlFNkyutY6qXRyT/JRdUusQLZp6k1MXS47eeKDJh3PBtgHNof2sO" , "fred" , "smith" , 5000f);    //fred
+        users[1] = new User("giverEmail2", "$2a$12$Ko/Ai7TyQwfVAFYS42jfl.YeP01OpDIoU7b6spyMXz7FWbPC4XYWC" , "mike" , "smith" , 200f); //mike
+        users[2] = new User("giverEmail3", "$2a$12$xESGiGC8PVYoeMa3pC4TXOp/AYm8WVvuHqh5dTf6sbwN9c8nvNNRC", "cindy" , "smith" , 0f);   //cindy
+        users[3] = new User("giverEmail4", "$2a$12$DxOiBwpuYZStOBfhzYvWWeEzZFcg96WLgMIOMwNLfkWPgtlf7qzb2" , "jack" , "smith" , 5000f);    //jack
+
         userRepository.saveAll(Arrays.asList(users));
 
         Contact[] contacts = new Contact[5];
@@ -45,14 +42,10 @@ public class DataInsertService {
 
         MoneyTransaction[] moneyTransactions = new MoneyTransaction[4];
 
-        User userReceiver = new User("userMoneyTransactionEmail", "userMoneyTransactionPassword","nameReceiver",  200f);
-        //bCryptPasswordEncoder.encode("userMoneyTransactionPassword")
-
-        userRepository.save(userReceiver);
-        moneyTransactions[0] = new MoneyTransaction("giverEmail1", userReceiver, "description1", 15);
-        moneyTransactions[1] = new MoneyTransaction("giverEmail2", userReceiver, "description2", 456);
-        moneyTransactions[2] = new MoneyTransaction("giverEmail3", userReceiver, "description3", 78);
-        moneyTransactions[3] = new MoneyTransaction("giverEmail4", userReceiver, "description4", 21);
+        moneyTransactions[0] = new MoneyTransaction("giverEmail1", users[0], "description1", 15);
+        moneyTransactions[1] = new MoneyTransaction("giverEmail2", users[1], "description2", 456);
+        moneyTransactions[2] = new MoneyTransaction("giverEmail3", users[2], "description3", 78);
+        moneyTransactions[3] = new MoneyTransaction("giverEmail4", users[3], "description4", 21);
         moneyTransactionRepository.saveAll(Arrays.asList(moneyTransactions));
     }
 }

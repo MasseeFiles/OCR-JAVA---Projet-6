@@ -1,7 +1,10 @@
 package com.paymybuddy.service;
 
 import com.paymybuddy.model.User;
+import com.paymybuddy.repository.ContactRepository;
+import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,11 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @SpringBootTest
-
-@ActiveProfiles("test") //annotation pour charger configuration application-test.yml
-
+//@ActiveProfiles("test") //annotation pour charger configuration application-test.yml
 @AutoConfigureMockMvc
-
 
 public class MoneyTransactionControllerTest {       //Tests d'integration!!!
     @Autowired
@@ -28,6 +28,17 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
 
     @Autowired
     private UserRepository userRepository;
+//    @Autowired
+
+//    private ContactRepository contactRepository;
+//    @Autowired
+//
+//    private MoneyTransactionRepository moneyTransactionRepository;
+//
+//@BeforeEach
+//public void setup() {
+//  DataInsertService dataInsertService;
+//}
 
     @Test
     @WithMockUser(username = "giverEmail1")
@@ -43,6 +54,7 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
     @Test
     @WithMockUser(username = "giverEmail1")
     void shouldReturnModelUpdated() throws Exception {  //verifier necessaire??? - boite noire / model
+
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/transfer"))
                 .andExpect(MockMvcResultMatchers
@@ -60,17 +72,17 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
     @Test
     @WithMockUser(username = "giverEmail1")
     void shouldChangeBalances() throws Exception {
-        Float balanceGiverInput = userRepository.findById("giverEmail1").map(User::getBalance).orElseThrow();
-        Float balanceReceiverInput = userRepository.findById("giverEmail2").map(user -> user.getBalance()).orElseThrow();
+        Float balanceGiverInput = userRepository.findByUserEmail("giverEmail1").map(User::getBalance).orElseThrow();
+        Float balanceReceiverInput = userRepository.findByUserEmail("giverEmail2").map(user -> user.getBalance()).orElseThrow();
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/transfer")
-                .param("contactIdEmbeddedIdOtherEmail", "giverEmail2")
+                .param("contactEmbeddedIdOtherEmail", "giverEmail2")
                 .param("transferAmount", "100")
                 .with(csrf()));
 
-        Float balanceGiverOutput = userRepository.findById("giverEmail1").map(user -> user.getBalance()).orElseThrow();
-        Float balanceReceiverOutput = userRepository.findById("giverEmail2").map(user -> user.getBalance()).orElseThrow();
+        Float balanceGiverOutput = userRepository.findByUserEmail("giverEmail1").map(user -> user.getBalance()).orElseThrow();
+        Float balanceReceiverOutput = userRepository.findByUserEmail("giverEmail2").map(user -> user.getBalance()).orElseThrow();
 
         assertEquals(balanceGiverOutput, (balanceGiverInput - 100));
         assertEquals(balanceReceiverOutput, (balanceReceiverInput + 100));
@@ -81,7 +93,7 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
     void shouldReturnView_Redirect() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/transfer")
-                        .param("contactIdEmbeddedIdOtherEmail", "giverEmail2")
+                        .param("contactEmbeddedIdOtherEmail", "giverEmail2")
                         .param("transferAmount", "100")
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers

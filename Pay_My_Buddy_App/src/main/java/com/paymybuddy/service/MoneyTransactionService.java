@@ -24,7 +24,7 @@ public class MoneyTransactionService { // interface a implementer
 
         String giverEmail = moneyTransaction.getGiverEmail();
 
-        User giverToCheck = userRepository.findById(giverEmail)
+        User giverToCheck = userRepository.findByUserEmail(giverEmail)
                 .orElseThrow(() -> new RuntimeException("User giver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
 
 //                      Equivaut à
@@ -47,7 +47,7 @@ public class MoneyTransactionService { // interface a implementer
 
             String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
 
-            User receiverToUpdate = userRepository.findById(moneyTransaction.getReceiver().getUserEmail())
+            User receiverToUpdate = userRepository.findByUserEmail(moneyTransaction.getReceiver().getUserEmail())
                     .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail));    //.orElseThrow converti l'optional en User
 
 //                    Equivaut à

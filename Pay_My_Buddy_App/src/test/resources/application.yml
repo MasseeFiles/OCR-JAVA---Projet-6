@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
 
     show-sql: true
 
@@ -19,6 +19,5 @@ logging:
     org:
       springframework:
         security: debug
-spring.datasource.type: org.springframework.jdbc.datasource.SimpleDriverDataSource
 
 

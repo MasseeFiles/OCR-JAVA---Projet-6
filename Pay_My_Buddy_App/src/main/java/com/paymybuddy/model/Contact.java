@@ -8,10 +8,6 @@ import lombok.Data;
 //@IdClass(ContactId)      //clef primaire composite avec @IdClass
 @Table(name = "contacts")
 public class Contact {
-        @Column(name = "contact_id")
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int contact_Id;
-
         @Column(name = "name_contact")
         private String nameContact;
 

@@ -13,6 +13,7 @@ public class User {
 
     @Id //specifie le field à utiliser en PK
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
     @Column(name = "user_email" , unique = true)

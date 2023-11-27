@@ -44,7 +44,7 @@ public class MoneyTransactionController {
         List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
         model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
-        User userAuthenticated = userRepository.findById(userEmailAuthenticated)
+        User userAuthenticated = userRepository.findByUserEmail(userEmailAuthenticated)
                 .orElseThrow(() -> new RuntimeException("UserAuthenticated not found : Id used " + userEmailAuthenticated));
         List<Contact> contactsAuthenticated = userAuthenticated.getContacts();
         model.addAttribute("contacts", contactsAuthenticated);

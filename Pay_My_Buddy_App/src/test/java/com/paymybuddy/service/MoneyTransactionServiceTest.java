@@ -2,6 +2,7 @@ package com.paymybuddy.service;
 
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.User;
+import com.paymybuddy.repository.ContactRepository;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,7 @@ class MoneyTransactionServiceTest {
         giver.setUserEmail(giverEmail);
         giver.setBalance(500f);
         Optional<User> optionalGiverTest = Optional.of(giver);
-        when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
+        when(userRepository.findByUserEmail(giverEmail)).thenReturn(optionalGiverTest);  //mock
 
         User receiver = new User();
         String receiverEmail = ("receiver@email.com");
@@ -46,7 +47,7 @@ class MoneyTransactionServiceTest {
         receiver.setBalance(500f);
         Optional<User> optionalReceiverTest = Optional.of(receiver);
         moneyTransaction.setReceiver(receiver);
-        when(userRepository.findById(receiverEmail)).thenReturn(optionalReceiverTest);  //mock
+        when(userRepository.findByUserEmail(receiverEmail)).thenReturn(optionalReceiverTest);  //mock
 
         //WHEN
         boolean booleanTest = paymentService.allowPayment(moneyTransaction);
@@ -75,14 +76,14 @@ class MoneyTransactionServiceTest {
         giver.setBalance(100f);
         Optional<User> optionalGiverTest = Optional.of(giver);
         String giverEmail = "giver@email.com";
-        when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
+        when(userRepository.findByUserEmail(giverEmail)).thenReturn(optionalGiverTest);  //mock
 
         User receiver = new User();
         receiver.setUserEmail("receiver@email.com");
         receiver.setBalance(500f);
         Optional<User> optionalReceiverTest = Optional.of(receiver);
         moneyTransaction.setReceiver(receiver);
-        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
+        when(userRepository.findByUserEmail(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
 
         //WHEN
         boolean booleanTest = paymentService.allowPayment(moneyTransaction);
@@ -100,14 +101,14 @@ class MoneyTransactionServiceTest {
         moneyTransaction.setAmount(200.05f);
 
         Optional<User> optionalEmpty = Optional.empty();
-        when(userRepository.findById(giverEmail)).thenReturn(optionalEmpty);  //giver non present dans la BDD , renvoie un optional Empty
+        when(userRepository.findByUserEmail(giverEmail)).thenReturn(optionalEmpty);  //giver non present dans la BDD , renvoie un optional Empty
 
         User receiver = new User();
         receiver.setUserEmail("receiver@email.com");
         receiver.setBalance(500f);
         Optional<User> optionalReceiverTest = Optional.of(receiver);
         moneyTransaction.setReceiver(receiver);
-        when(userRepository.findById(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
+        when(userRepository.findByUserEmail(receiver.getUserEmail())).thenReturn(optionalReceiverTest);  //mock
 
         //WHEN
 
@@ -129,7 +130,7 @@ class MoneyTransactionServiceTest {
         giver.setUserEmail(giverEmail);
         giver.setBalance(500f);
         Optional<User> optionalGiverTest = Optional.of(giver);
-        when(userRepository.findById(giverEmail)).thenReturn(optionalGiverTest);  //mock
+        when(userRepository.findByUserEmail(giverEmail)).thenReturn(optionalGiverTest);  //mock
 
         User receiver = new User();
         String receiverEmail = "receiver@email.com";
@@ -138,7 +139,7 @@ class MoneyTransactionServiceTest {
         moneyTransaction.setReceiver(receiver);
 
         Optional<User> optionalEmpty = Optional.empty();
-        when(userRepository.findById(receiverEmail)).thenReturn(optionalEmpty); // receiver non present dans la BDD , renvoie un optional Empty
+        when(userRepository.findByUserEmail(receiverEmail)).thenReturn(optionalEmpty); // receiver non present dans la BDD , renvoie un optional Empty
 
         //WHEN
 
