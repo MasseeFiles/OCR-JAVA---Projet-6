@@ -36,7 +36,7 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "origin_email" )    //doit specifier nom de clef etrangere
+    @JoinColumn(name = "origin_email", referencedColumnName = "user_email")    //doit specifier nom de clef etrangere
     private List<Contact> contacts = new ArrayList<Contact>();
 
     // Constructeurs

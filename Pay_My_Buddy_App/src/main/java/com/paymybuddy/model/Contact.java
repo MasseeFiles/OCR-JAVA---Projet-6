@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 @Entity
-//@IdClass(ContactId)      //clef primaire composite avec @IdClass
 @Table(name = "contacts")
 public class Contact {
         @Column(name = "name_contact")

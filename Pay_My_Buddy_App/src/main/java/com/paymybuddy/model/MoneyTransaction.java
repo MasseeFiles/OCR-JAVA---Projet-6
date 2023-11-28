@@ -9,11 +9,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "money_transactions")
 public class MoneyTransaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "money_transaction_id")
+    private int moneyTransactionId;
+
     @Column(name = "giver_Email")
     private String giverEmail;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_email")
+    @JoinColumn(name = "receiver_email",  referencedColumnName = "user_email")
     private User receiver;
 
     @Column(name = "description")
@@ -22,11 +27,7 @@ public class MoneyTransaction {
     @Column(name = "amount")
     private float amount;
 
-    @Id //clef primaire
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //mode de generation de l'attribut - en rapport avec identity column de la BDD
-    @Column(name = "money_transaction_id")
-    private int moneyTransactionId;
+
 
     public MoneyTransaction(String giverEmail, User receiver, String description, float amount) {
         this.giverEmail = giverEmail;

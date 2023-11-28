@@ -7,8 +7,10 @@ import com.paymybuddy.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class MoneyTransactionService { // interface a implementer
+public class MoneyTransactionService {
     private final UserRepository userRepository;
     private final MoneyTransactionRepository moneyTransactionRepository;
 
@@ -50,6 +52,8 @@ public class MoneyTransactionService { // interface a implementer
             User receiverToUpdate = userRepository.findByUserEmail(moneyTransaction.getReceiver().getUserEmail())
                     .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail));    //.orElseThrow converti l'optional en User
 
+            moneyTransaction.setReceiver(receiverToUpdate);
+
 //                    Equivaut à
 //            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
 //            if (optionalReceiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
@@ -69,5 +73,9 @@ public class MoneyTransactionService { // interface a implementer
             paymentAllowed = false;
         }
         return paymentAllowed;
+    }
+
+    public List<MoneyTransaction> findAllByEmail(String userEmailAuthenticated) {
+        return (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
     }
 }

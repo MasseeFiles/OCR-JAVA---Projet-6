@@ -4,8 +4,6 @@ import com.paymybuddy.model.Contact;
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.MoneyTransactionDto;
 import com.paymybuddy.model.User;
-import com.paymybuddy.repository.MoneyTransactionRepository;
-import com.paymybuddy.repository.UserRepository;
 import com.paymybuddy.service.MoneyTransactionService;
 import com.paymybuddy.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -21,17 +19,10 @@ import java.util.List;
 @Controller
 public class MoneyTransactionController {
     private static final Logger logger = LogManager.getLogger("MoneyTransactionController");
-
     @Autowired
     private MoneyTransactionService moneyTransactionService;
-
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private MoneyTransactionRepository moneyTransactionRepository;
 
     //  enpoint get sert uniquement à l'insertion des données de la BDD dans la vue (via thymeleaf)
     @GetMapping("/transfer")
@@ -41,11 +32,13 @@ public class MoneyTransactionController {
 
         String userEmailAuthenticated = userService.getUserEmailAuthenticated();
 
-        List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
+//        List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
+        List<MoneyTransaction> moneyTransactionsAuthenticated = moneyTransactionService.findAllByEmail(userEmailAuthenticated);
         model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
-        User userAuthenticated = userRepository.findByUserEmail(userEmailAuthenticated)
-                .orElseThrow(() -> new RuntimeException("UserAuthenticated not found : Id used " + userEmailAuthenticated));
+//        User userAuthenticated = userRepository.findByUserEmail(userEmailAuthenticated)
+//                .orElseThrow(() -> new RuntimeException("UserAuthenticated not found : Id used " + userEmailAuthenticated));
+        User userAuthenticated = userService.findByUserEmail(userEmailAuthenticated);
         List<Contact> contactsAuthenticated = userAuthenticated.getContacts();
         model.addAttribute("contacts", contactsAuthenticated);
 
@@ -81,6 +74,7 @@ public class MoneyTransactionController {
             return "redirect:/transfer";
         }
     }
+
 }
 
 
