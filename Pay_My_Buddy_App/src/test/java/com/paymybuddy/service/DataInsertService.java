@@ -19,7 +19,7 @@ public class DataInsertService {
 
         User[] users = new User[4];
 
-        users[0] = new User("giverEmail1", "$2a$12$kVlFNkyutY6qXRyT/JRdUusQLZp6k1MXS47eeKDJh3PBtgHNof2sO" , "fred" , "smith" , 5000f);    //fred
+        users[0] = new User("giverEmail1", "$2a$12$kVlFNkyutY6qXRyT/JRdUusQLZp6k1MXS47eeKDJh3PBtgHNof2sO" , "fred" , "smith" , 6000f);    //fred
         users[1] = new User("giverEmail2", "$2a$12$Ko/Ai7TyQwfVAFYS42jfl.YeP01OpDIoU7b6spyMXz7FWbPC4XYWC" , "mike" , "smith" , 200f); //mike
         users[2] = new User("giverEmail3", "$2a$12$xESGiGC8PVYoeMa3pC4TXOp/AYm8WVvuHqh5dTf6sbwN9c8nvNNRC" , "cindy" , "smith" , 0f);   //cindy
         users[3] = new User("giverEmail4", "$2a$12$DxOiBwpuYZStOBfhzYvWWeEzZFcg96WLgMIOMwNLfkWPgtlf7qzb2" , "jack" , "smith" , 5000f);    //jack

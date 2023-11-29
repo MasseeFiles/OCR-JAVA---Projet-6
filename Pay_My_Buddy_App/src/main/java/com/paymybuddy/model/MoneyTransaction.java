@@ -14,11 +14,11 @@ public class MoneyTransaction {
     @Column(name = "money_transaction_id")
     private int moneyTransactionId;
 
-    @Column(name = "giver_Email")
+    @Column(name = "giver_email")
     private String giverEmail;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_email",  referencedColumnName = "user_email")
+    @JoinColumn(name = "receiver_email", referencedColumnName = "user_email")
     private User receiver;
 
     @Column(name = "description")
@@ -26,8 +26,6 @@ public class MoneyTransaction {
 
     @Column(name = "amount")
     private float amount;
-
-
 
     public MoneyTransaction(String giverEmail, User receiver, String description, float amount) {
         this.giverEmail = giverEmail;
