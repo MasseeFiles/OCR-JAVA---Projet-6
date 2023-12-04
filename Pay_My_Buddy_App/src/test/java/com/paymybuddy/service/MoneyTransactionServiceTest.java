@@ -2,7 +2,6 @@ package com.paymybuddy.service;
 
 import com.paymybuddy.model.MoneyTransaction;
 import com.paymybuddy.model.User;
-import com.paymybuddy.repository.ContactRepository;
 import com.paymybuddy.repository.MoneyTransactionRepository;
 import com.paymybuddy.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
