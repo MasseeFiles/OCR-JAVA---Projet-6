@@ -8,10 +8,14 @@
 
 
 ## Diagramme de classe UML
-![diagramme_de_classe](https://drive.google.com/file/d/1sq6hnmJ-bPgiLc8BiEe_9gpmFCPuIvZS/view?usp=sharing)
+![diagramme_de_classe](diagramme_classe.pdf)
+
+https://drive.google.com/file/d/1sq6hnmJ-bPgiLc8BiEe_9gpmFCPuIvZS/view?usp=sharing
 
 ## Modèle physique de données
-![modele_physique_de_donnees](https://drive.google.com/file/d/1sq6hnmJ-bPgiLc8BiEe_9gpmFCPuIvZS/view?usp=sharing)
+![modele_physique_de_donnees](modele_physique_donnees.pdf)
+
+https://drive.google.com/file/d/1sq6hnmJ-bPgiLc8BiEe_9gpmFCPuIvZS/view?usp=sharing
 
 
 
