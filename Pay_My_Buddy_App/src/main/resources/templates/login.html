@@ -44,26 +44,24 @@
         <div class="text-light bg-dark pt-23 text-center" style="height: 2em">Pay My Buddy</div>
     </header>
     <div id="loginBox" class="center text-center">
-        <!--
-        <img src="logoPMB.png" alt="Logo - Pay My Buddy" class="logo">
-        -->
-        <form th:action="@{/login}" method="post">
-            <div class="formBox">
-                <input type="text"  name="userEmail" placeholder="&#x1F4E7 Email" class="form-input">
-            </div>
-            <div class="formBox">
-                <input type="password" name="password" placeholder="&#10034 Password"
-                       class="form-input">
-            </div>
-            <div>
-                <input type="checkbox" class="form-check-label center" id="rememberMe">
-                <label for="rememberMe" class="form-check-label">Remember me</label>
-            </div>
-            <div class="formBox">
-                <button type="submit" value="Sign In" class="btn btn-primary">Login</button>
-            </div>
-        </form>
-    </div>
+<img src="/logoPMB.png" alt="Logo - Pay My Buddy" class="logo">
+<form th:action="@{/login}" method="post">
+<div class="formBox">
+    <input type="text"  name="userEmail" placeholder="&#x1F4E7 Email" class="form-input">
+</div>
+<div class="formBox">
+    <input type="password" name="password" placeholder="&#10034 Password"
+           class="form-input">
+</div>
+<div>
+    <input type="checkbox" class="form-check-label center" id="rememberMe">
+    <label for="rememberMe" class="form-check-label">Remember me</label>
+</div>
+<div class="formBox">
+    <button type="submit" value="Sign In" class="btn btn-primary">Login</button>
+</div>
+</form>
+</div>
 </div>
 </body>
 </html>

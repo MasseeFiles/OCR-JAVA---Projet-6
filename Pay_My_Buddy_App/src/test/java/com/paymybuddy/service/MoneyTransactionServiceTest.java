@@ -145,7 +145,6 @@ class MoneyTransactionServiceTest {
         //THEN
         assertThatThrownBy(() -> paymentService.allowPayment(moneyTransaction))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("User receiver not found")
-        ;
+                .hasMessageContaining("User receiver not found");
     }
 }

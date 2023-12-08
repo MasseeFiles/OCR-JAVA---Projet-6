@@ -20,8 +20,9 @@ public class SpringSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/transfer").authenticated()
+                        .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/logoPMB.png").permitAll()
                 )
-                //MONTODO : enlever les appels aux images logo et favicon du context spring security pour eviter 3 loggers  ("Requete pour l'affichage de la page HTML login");
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .usernameParameter("userEmail") //definit dans le form la valeur considérée par spring comme un username
@@ -36,7 +37,7 @@ public class SpringSecurityConfig {
     @Autowired
     void configureGlobal(DataSource projectDataBase, AuthenticationManagerBuilder auth) throws Exception {  //parametre auth permet de configurer le mechanisme d'authentification - configuration d'un filtre particulier
         auth.jdbcAuthentication()   //methode particuliere pour authentification via une bdd (JDBC - Java Database Connectivity).
-                .dataSource(projectDataBase)    //bdd à utiliser
+                .dataSource(projectDataBase)
                 .usersByUsernameQuery("SELECT user_email , password , true FROM users WHERE user_email = ?")
                 .authoritiesByUsernameQuery("SELECT user_email , 'user' FROM users WHERE user_email = ?")
         ;

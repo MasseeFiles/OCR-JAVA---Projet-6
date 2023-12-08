@@ -24,7 +24,6 @@ public class MoneyTransactionController {
     @Autowired
     private UserService userService;
 
-    //  enpoint get sert uniquement à l'insertion des données de la BDD dans la vue (via thymeleaf)
     @GetMapping("/transfer")
     public String getTransfer(Model model) {    //parametre "Model" permet de passer des données du controller à la vue via thymeleaf
 
@@ -32,12 +31,9 @@ public class MoneyTransactionController {
 
         String userEmailAuthenticated = userService.getUserEmailAuthenticated();
 
-//        List<MoneyTransaction> moneyTransactionsAuthenticated = (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
         List<MoneyTransaction> moneyTransactionsAuthenticated = moneyTransactionService.findAllByEmail(userEmailAuthenticated);
         model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
-//        User userAuthenticated = userRepository.findByUserEmail(userEmailAuthenticated)
-//                .orElseThrow(() -> new RuntimeException("UserAuthenticated not found : Id used " + userEmailAuthenticated));
         User userAuthenticated = userService.findByUserEmail(userEmailAuthenticated);
         List<Contact> contactsAuthenticated = userAuthenticated.getContacts();
         model.addAttribute("contacts", contactsAuthenticated);
@@ -74,7 +70,6 @@ public class MoneyTransactionController {
             return "redirect:/transfer";
         }
     }
-
 }
 
 

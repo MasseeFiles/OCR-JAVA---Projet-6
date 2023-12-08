@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -15,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @SpringBootTest
-//@ActiveProfiles("test") //annotation pour charger configuration application-test.yml
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 
-public class MoneyTransactionControllerTest {       //Tests d'integration!!!
+public class MoneyTransactionControllerTest {
     @Autowired
-    private MockMvc mockMvc;  //mock qui envoie les request http
+    private MockMvc mockMvc;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,14 +32,14 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
         mockMvc.perform(MockMvcRequestBuilders     //methode perform sert à envoyer la request lors du test
                         .get("/transfer"))
                 .andExpect(MockMvcResultMatchers    //methode andExpect() sert à definir les assertions. Renvoie un objet  ResultActions
-                        .status().isOk())  //method status() pour le status http retourné
+                        .status().isOk())
                 .andExpect(MockMvcResultMatchers
                         .view().name("transfer"));
     }
 
     @Test
     @WithMockUser(username = "giverEmail1")
-    void shouldReturnModelUpdated() throws Exception {  //verifier necessaire??? - boite noire / model
+    void shouldReturnModelUpdated() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/transfer"))
@@ -46,12 +47,6 @@ public class MoneyTransactionControllerTest {       //Tests d'integration!!!
                         .model().attributeExists("moneyTransactions"))
                 .andExpect(MockMvcResultMatchers
                         .model().attributeExists("contacts"));
-
-        //equivalent à
-//        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/transfer")).andReturn();
-//        ModelMap model = Objects.requireNonNull(result.getModelAndView()).getModelMap();
-//        assertTrue(model.containsAttribute("moneyTransactions"));
-//        assertTrue(model.containsAttribute("contacts"));
     }
 
     @Test

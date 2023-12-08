@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 import lombok.Data;
 
 import java.io.Serializable;
+
 @Data
 @Embeddable
 public class ContactEmbeddedId implements Serializable {
@@ -15,6 +16,7 @@ public class ContactEmbeddedId implements Serializable {
 
     public ContactEmbeddedId() {
     }
+
     public ContactEmbeddedId(String originEmail, String otherEmail) {
         this.originEmail = originEmail;
         this.otherEmail = otherEmail;

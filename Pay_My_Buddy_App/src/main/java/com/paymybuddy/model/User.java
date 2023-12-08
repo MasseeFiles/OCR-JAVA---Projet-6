@@ -16,7 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
-    @Column(name = "user_email" , unique = true)
+    @Column(name = "user_email", unique = true)
     private String userEmail;
 
     @Column(name = "password")
@@ -36,14 +36,13 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "origin_email", referencedColumnName = "user_email")    //doit specifier nom de clef etrangere
+    @JoinColumn(name = "origin_email", referencedColumnName = "user_email")
     private List<Contact> contacts = new ArrayList<Contact>();
 
-    // Constructeurs
     public User() {
     }
 
-    public User(String userEmail , String password , String firstName , String lastName, float balance) {
+    public User(String userEmail, String password, String firstName, String lastName, float balance) {
         this.userEmail = userEmail;
         this.password = password;
         this.firstName = firstName;
