@@ -7,6 +7,7 @@ import com.paymybuddy.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,10 +25,10 @@ public class MoneyTransactionService {
         boolean paymentAllowed;
         float transferAmount = moneyTransaction.getAmount();
 
-        String giverEmail = moneyTransaction.getGiverEmail();
+//        String giverEmail = moneyTransaction.getGiverEmail();
 
-        User giverToCheck = userRepository.findByUserEmail(giverEmail)
-                .orElseThrow(() -> new RuntimeException("User giver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
+//        User giverToCheck = userRepository.findByUserEmail(giverEmail)
+//                .orElseThrow(() -> new RuntimeException("User giver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
 
 //                      Equivaut à
 //        Optional<User> optionalGiver = userRepository.findById(giverEmail);
@@ -37,22 +38,24 @@ public class MoneyTransactionService {
 //        User giverToCheck = optionalGiver.get();
 //        }
 
-        float balanceGiver = giverToCheck.getBalance();
+        float balanceGiver = moneyTransaction.getGiver().getBalance();
 
         if (transferAmount <= balanceGiver) {    //verification du solde du donneur
             paymentAllowed = true;
 
-            float balanceGiverToUpdate = giverToCheck.getBalance();
+            User giverToUpdate = moneyTransaction.getGiver();
+
+            float balanceGiverToUpdate = giverToUpdate.getBalance();
             float newBalanceGiver = balanceGiverToUpdate - transferAmount;
-            giverToCheck.setBalance(newBalanceGiver);
-            userRepository.save(giverToCheck); //update
+            giverToUpdate.setBalance(newBalanceGiver);
+            userRepository.save(giverToUpdate); //update
 
-            String receiverEmail = moneyTransaction.getReceiver().getUserEmail();
+            User receiverToUpdate = moneyTransaction.getReceiver();
 
-            User receiverToUpdate = userRepository.findByUserEmail(moneyTransaction.getReceiver().getUserEmail())
-                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail));    //.orElseThrow converti l'optional en User
-
-            moneyTransaction.setReceiver(receiverToUpdate);
+//            userRepository.findByUserEmail(moneyTransaction.getReceiver().getUserEmail())
+//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail));    //.orElseThrow converti l'optional en User
+//
+//            moneyTransaction.setReceiver(receiverToUpdate);
 
 //                    Equivaut à
 //            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
@@ -75,7 +78,7 @@ public class MoneyTransactionService {
         return paymentAllowed;
     }
 
-    public List<MoneyTransaction> findAllByEmail(String userEmailAuthenticated) {
-        return (List<MoneyTransaction>) moneyTransactionRepository.findAllByGiverEmail(userEmailAuthenticated);
+    public List<MoneyTransaction> findAllById(int moneyTransactionId) {
+        return (List<MoneyTransaction>) moneyTransactionRepository.findAllById(Collections.singleton(moneyTransactionId));
     }
 }

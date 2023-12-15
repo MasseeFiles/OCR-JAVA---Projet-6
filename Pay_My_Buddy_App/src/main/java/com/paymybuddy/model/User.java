@@ -10,13 +10,12 @@ import java.util.List;
 @Entity //annotation mappage objet sql / objet java
 @Table(name = "users")  //lien direct entre objet java et table associée
 public class User {
-
     @Id //specifie le field à utiliser en PK
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
-    @Column(name = "user_email", unique = true)
+    @Column(name = "user_email")
     private String userEmail;
 
     @Column(name = "password")
@@ -36,8 +35,12 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "origin_email", referencedColumnName = "user_email")
+    @JoinColumn(name = "origin_id", referencedColumnName = "user_id")
     private List<Contact> contacts = new ArrayList<Contact>();
+
+    @OneToMany
+    @JoinColumn(name = "giver_id", referencedColumnName = "user_id")
+    private List<MoneyTransaction> moneyTransactions = new ArrayList<MoneyTransaction>();
 
     public User() {
     }

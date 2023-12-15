@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class MoneyTransactionDto {
-    private String contactEmbeddedIdOtherEmail;
+    private String otherUserEmail;
     private float transferAmount;
 }

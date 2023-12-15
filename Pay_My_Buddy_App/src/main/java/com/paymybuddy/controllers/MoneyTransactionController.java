@@ -30,11 +30,12 @@ public class MoneyTransactionController {
         logger.info("Requete pour l'affichage de la page HTML transfer");
 
         String userEmailAuthenticated = userService.getUserEmailAuthenticated();
+        User userAuthenticated = userService.findByUserEmail(userEmailAuthenticated);
 
-        List<MoneyTransaction> moneyTransactionsAuthenticated = moneyTransactionService.findAllByEmail(userEmailAuthenticated);
+//        List<MoneyTransaction> moneyTransactionsAuthenticated = moneyTransactionService.findAllById(userEmailAuthenticated.getUserId());
+        List<MoneyTransaction> moneyTransactionsAuthenticated = userAuthenticated.getMoneyTransactions();
         model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
-        User userAuthenticated = userService.findByUserEmail(userEmailAuthenticated);
         List<Contact> contactsAuthenticated = userAuthenticated.getContacts();
         model.addAttribute("contacts", contactsAuthenticated);
 
@@ -47,15 +48,15 @@ public class MoneyTransactionController {
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
-        String userEmailAuthenticated = userService.getUserEmailAuthenticated();
-
         MoneyTransaction moneyTransactionToAdd = new MoneyTransaction();
-        moneyTransactionToAdd.setGiverEmail(userEmailAuthenticated);
+
+        String userEmailAuthenticated = userService.getUserEmailAuthenticated();
+        User userAuthenticated = userService.findByUserEmail(userEmailAuthenticated);
+        moneyTransactionToAdd.setGiver(userAuthenticated);
 
         //Passage des données d'un moneyTransactionDto à un moneyTransaction
-        String receiverEmailToAdd = moneyTransactionDto.getContactEmbeddedIdOtherEmail();
-        User userReceiver = new User();
-        userReceiver.setUserEmail(receiverEmailToAdd);
+        String receiverEmailToAdd = moneyTransactionDto.getOtherUserEmail();
+        User userReceiver = userService.findByUserEmail(receiverEmailToAdd);
         moneyTransactionToAdd.setReceiver(userReceiver);
 
         moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
