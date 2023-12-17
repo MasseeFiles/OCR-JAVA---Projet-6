@@ -27,7 +27,7 @@ public class MoneyTransactionControllerTest {
     private UserRepository userRepository;
 
     @Test
-    @WithMockUser(username = "giverEmail1")
+    @WithMockUser(username = "userEmail1")
     void shouldReturnStatus_OkAndView_Transfer() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders     //methode perform sert à envoyer la request lors du test
                         .get("/transfer"))
@@ -38,9 +38,8 @@ public class MoneyTransactionControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "giverEmail1")
+    @WithMockUser(username = "userEmail1")
     void shouldReturnModelUpdated() throws Exception {
-
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/transfer"))
                 .andExpect(MockMvcResultMatchers
@@ -50,30 +49,30 @@ public class MoneyTransactionControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "giverEmail1")
+    @WithMockUser(username = "userEmail1")
     void shouldChangeBalances() throws Exception {
-        Float balanceGiverInput = userRepository.findByUserEmail("giverEmail1").map(User::getBalance).orElseThrow();
-        Float balanceReceiverInput = userRepository.findByUserEmail("giverEmail2").map(user -> user.getBalance()).orElseThrow();
+        Float balanceGiverInput = userRepository.findByUserEmail("userEmail1").map(User::getBalance).orElseThrow();
+        Float balanceReceiverInput = userRepository.findByUserEmail("userEmail2").map(user -> user.getBalance()).orElseThrow();
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/transfer")
-                .param("contactEmbeddedIdOtherEmail", "giverEmail2")
+                .param("otherUserEmail", "userEmail2")
                 .param("transferAmount", "100")
                 .with(csrf()));
 
-        Float balanceGiverOutput = userRepository.findByUserEmail("giverEmail1").map(user -> user.getBalance()).orElseThrow();
-        Float balanceReceiverOutput = userRepository.findByUserEmail("giverEmail2").map(user -> user.getBalance()).orElseThrow();
+        Float balanceGiverOutput = userRepository.findByUserEmail("userEmail1").map(user -> user.getBalance()).orElseThrow();
+        Float balanceReceiverOutput = userRepository.findByUserEmail("userEmail2").map(user -> user.getBalance()).orElseThrow();
 
         assertEquals(balanceGiverOutput, (balanceGiverInput - 100));
         assertEquals(balanceReceiverOutput, (balanceReceiverInput + 100));
     }
 
     @Test
-    @WithMockUser(username = "giverEmail1")
+    @WithMockUser(username = "userEmail1")
     void shouldReturnView_Redirect() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/transfer")
-                        .param("contactEmbeddedIdOtherEmail", "giverEmail2")
+                        .param("otherUserEmail", "userEmail2")
                         .param("transferAmount", "100")
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers
