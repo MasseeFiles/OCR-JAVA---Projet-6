@@ -80,6 +80,20 @@ public class MoneyTransactionControllerTest {
                 .andExpect(MockMvcResultMatchers
                         .view().name("redirect:/transfer"));
     }
+
+    @Test
+    @WithMockUser(username = "userEmail1")
+    void shouldRedirectTransferWhenUserReceiverIsNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/transfer")
+                .param("otherUserEmail", "userNotInBase")
+                .param("transferAmount", "100")
+                .with(csrf()))
+            .andExpect(MockMvcResultMatchers
+            .status().is3xxRedirection())
+            .andExpect(MockMvcResultMatchers
+                    .view().name("redirect:/transfer"));
+    }
 }
 
 

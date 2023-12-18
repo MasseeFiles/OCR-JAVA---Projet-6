@@ -25,19 +25,6 @@ public class MoneyTransactionService {
         boolean paymentAllowed;
         float transferAmount = moneyTransaction.getAmount();
 
-//        String giverEmail = moneyTransaction.getGiverEmail();
-
-//        User giverToCheck = userRepository.findByUserEmail(giverEmail)
-//                .orElseThrow(() -> new RuntimeException("User giver not found : Id used " + giverEmail));     //.orElseThrow converti l'optional en User
-
-//                      Equivaut à
-//        Optional<User> optionalGiver = userRepository.findById(giverEmail);
-//        if (optionalGiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
-//            throw new RuntimeException("User giver not found : Id used " + giverEmail);
-//        } else {
-//        User giverToCheck = optionalGiver.get();
-//        }
-
         float balanceGiver = moneyTransaction.getGiver().getBalance();
 
         if (transferAmount <= balanceGiver) {    //verification du solde du donneur
@@ -51,19 +38,6 @@ public class MoneyTransactionService {
             userRepository.save(giverToUpdate); //update
 
             User receiverToUpdate = moneyTransaction.getReceiver();
-
-//            userRepository.findByUserEmail(moneyTransaction.getReceiver().getUserEmail())
-//                    .orElseThrow(() -> new RuntimeException("User receiver not found : Id used " + receiverEmail));    //.orElseThrow converti l'optional en User
-//
-//            moneyTransaction.setReceiver(receiverToUpdate);
-
-//                    Equivaut à
-//            Optional<User> optionalReceiver = userRepository.findById(receiverEmail);
-//            if (optionalReceiver.isEmpty()) {    //verification de la valeur vide ou pas de l'optional
-//                throw new RuntimeException("User receiver not found : Id used " + receiverEmail);
-//            } else {
-//            User receiverToUpdate = optionalReceiver.get();
-//            }
 
             float balanceReceiver = receiverToUpdate.getBalance();
             float newBalanceReceiver = balanceReceiver + transferAmount;

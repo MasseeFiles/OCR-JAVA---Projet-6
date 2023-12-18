@@ -1,16 +1,18 @@
 package com.paymybuddy.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "contacts")
 public class Contact {
     @Id //specifie le field à utiliser en PK
     @Column(name = "contact_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int contactID;
+    private int contactId;
 
     @ManyToOne
     @JoinColumn(name = "origin_user_id", referencedColumnName = "user_id")
@@ -22,9 +24,6 @@ public class Contact {
 
     @Column(name = "name_contact")
     private String nameContact;
-
-//    @EmbeddedId     //      clef primaire composite avec @EmbeddedId (originEmail et otherEmail)
-//    private ContactEmbeddedId contactEmbeddedId;
 
     public Contact() {
     }

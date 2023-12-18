@@ -35,12 +35,24 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "origin_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "origin_user_id", referencedColumnName = "user_id")
     private List<Contact> contacts = new ArrayList<Contact>();
+
+    @OneToMany( //definit impact de l'action d'une entity sur entity jointe (User et Contact) - attributs dessous reglent des situations particulieres
+            cascade = CascadeType.ALL,       //suppression de User entraine suppression des objets contact associés
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "other_user_id", referencedColumnName = "user_id")
+    private List<Contact> contactsAsOther = new ArrayList<Contact>();
 
     @OneToMany
     @JoinColumn(name = "giver_id", referencedColumnName = "user_id")
     private List<MoneyTransaction> moneyTransactions = new ArrayList<MoneyTransaction>();
+
+    @OneToMany
+    @JoinColumn(name = "receiver_id", referencedColumnName = "user_id")
+    private List<MoneyTransaction> moneyTransactionsAsReceiver = new ArrayList<MoneyTransaction>();
 
     public User() {
     }

@@ -1,12 +1,10 @@
 package com.paymybuddy.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,9 +15,6 @@ public class MoneyTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "money_transaction_id")
     private int moneyTransactionId;
-
-//    @Column(name = "giver_email")
-//    private String giverEmail;
 
     @ManyToOne
     @JoinColumn(name = "giver_id", referencedColumnName = "user_id")

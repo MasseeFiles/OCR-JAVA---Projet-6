@@ -32,7 +32,6 @@ public class MoneyTransactionController {
         String userEmailAuthenticated = userService.getUserEmailAuthenticated();
         User userAuthenticated = userService.findByUserEmail(userEmailAuthenticated);
 
-//        List<MoneyTransaction> moneyTransactionsAuthenticated = moneyTransactionService.findAllById(userEmailAuthenticated.getUserId());
         List<MoneyTransaction> moneyTransactionsAuthenticated = userAuthenticated.getMoneyTransactions();
         model.addAttribute("moneyTransactions", moneyTransactionsAuthenticated);
 
@@ -43,8 +42,7 @@ public class MoneyTransactionController {
     }
 
     @PostMapping("/transfer")
-    public String processPayment(MoneyTransactionDto moneyTransactionDto) {
-        //valeur renvoyée est une string qui indique une view à afficher
+    public String processPayment(MoneyTransactionDto moneyTransactionDto) {         //valeur renvoyée est une string qui indique une view à afficher
 
         logger.info("Requete pour l'ajout d'une moneyTransaction en utilisant le moneyTransactionDto  : " + moneyTransactionDto);
 
@@ -54,14 +52,12 @@ public class MoneyTransactionController {
         User userAuthenticated = userService.findByUserEmail(userEmailAuthenticated);
         moneyTransactionToAdd.setGiver(userAuthenticated);
 
-        //Passage des données d'un moneyTransactionDto à un moneyTransaction
         String receiverEmailToAdd = moneyTransactionDto.getOtherUserEmail();
-        User userReceiver = userService.findByUserEmail(receiverEmailToAdd);
-        moneyTransactionToAdd.setReceiver(userReceiver);
-
         moneyTransactionToAdd.setAmount(moneyTransactionDto.getTransferAmount());
 
         try {
+            User userReceiver = userService.findByUserEmail(receiverEmailToAdd);
+            moneyTransactionToAdd.setReceiver(userReceiver);
             moneyTransactionService.allowPayment(moneyTransactionToAdd);
             return "redirect:/transfer";
         } catch (RuntimeException ex) {
