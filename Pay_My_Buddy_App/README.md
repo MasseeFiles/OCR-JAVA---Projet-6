@@ -8,14 +8,11 @@
 
 
 ## Diagramme de classe UML
-![diagramme_de_classe](diagramme_classe.pdf)
-
-https://drive.google.com/file/d/1sq6hnmJ-bPgiLc8BiEe_9gpmFCPuIvZS/view?usp=sharing
+![diagramme de classe](https://github.com/MasseeFiles/OCR-JAVA---Projet-6/assets/111531899/d5caa27e-be7a-42ee-97bd-19e177722912)
 
 ## Modèle physique de données
-![modele_physique_de_donnees](modele_physique_donnees.pdf)
+![modele physique de donnees](https://github.com/MasseeFiles/OCR-JAVA---Projet-6/assets/111531899/c0e6ddae-27a3-4e0b-b8ff-aca078d263c6)
 
-https://drive.google.com/file/d/1sq6hnmJ-bPgiLc8BiEe_9gpmFCPuIvZS/view?usp=sharing
 
 
 
